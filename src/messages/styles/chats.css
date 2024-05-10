@@ -1,0 +1,12 @@
+.chats-grid {
+    display: grid;
+    grid-template-rows: 56px auto 64px;
+}
+
+.chat-row1 {
+    grid-row: 1;
+}
+
+.chat-row3 {
+    grid-row: 3;
+}
