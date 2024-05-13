@@ -11,7 +11,7 @@ function Messages() {
     return (
         <>
             <div className={`${showSettings ? 'w-4/6' : 'w-5/6'} h-full bg-grey rounded-xl shadow-inner`}>
-                <div className="flex justify-between p-3">
+                <div className="flex justify-between px-3 pt-3  border-b-2 border-highlighted-grey">
                     <div className="h-14 flex">
                         <div className="h-12 w-12 p-[6px]">
                             <div className="h-9 w-9 bg-white rounded-full">
