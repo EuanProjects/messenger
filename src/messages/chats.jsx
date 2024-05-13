@@ -5,8 +5,8 @@ import Card from "./card";
 function Chats() {
     return (
         <>
-            <div className="chats-grid w-1/3 min-w-80 h-full bg-grey rounded-xl shadow-inner">
-                <div className="chat-row1 h-14 w-full flex justify-between p-3">
+            <div className="chats-grid w-1/6 min-w-80 h-full bg-grey rounded-xl shadow-inner">
+                <div className="chat-row15 w-full flex justify-between p-3">
                     <h2 className="text-2xl font-bold text-light-grey">
                         Chats
                     </h2>

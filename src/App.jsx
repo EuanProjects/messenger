@@ -9,7 +9,7 @@ const App = () => {
     <div className="h-screen w-screen flex gap-4 bg-dark-grey p-4">
       <Navbar />
       <Chats />
-      {/* <Messages /> */}
+      <Messages />
     </div>
   );
 };
