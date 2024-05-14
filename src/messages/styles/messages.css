@@ -1,0 +1,38 @@
+.messages-grid {
+    display: grid;
+    grid-template-rows: 64px auto 64px;
+}
+
+.message-row1 {
+    grid-row: 1;
+}
+
+.message-row3 {
+    grid-row: 3;
+}
+
+.input-grid {
+    display: grid;
+    grid-template-columns: 40px auto 40px;
+}
+
+.message-group-sent {
+    display: grid;
+    grid-template-columns: auto 40px;
+    gap: 12px;
+}
+
+.message-group-recieved {
+    display: grid;
+    grid-template-columns: 40px auto;
+    gap: 12px;
+}
+
+.recieved-message-profile {
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
+
+.recieved-message {
+    grid-column-start: 2;
+}
