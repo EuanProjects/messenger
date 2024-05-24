@@ -1,0 +1,4 @@
+.settings-grid {
+    display: grid;
+    grid-template-rows: 64px auto 64px;
+}
