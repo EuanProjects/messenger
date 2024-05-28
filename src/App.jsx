@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Chats from "./messages/chats";
-import Messages from "./messages/messages";
-import Navbar from "./messages/navbar";
+import Chats from "./pages/messages/chats";
+import Messages from "./pages/messages/messages";
+import Navbar from "./pages/messages/navbar";
 
 const App = () => {
 
