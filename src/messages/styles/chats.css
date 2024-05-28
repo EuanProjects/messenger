@@ -1,6 +1,6 @@
 .chats-grid {
     display: grid;
-    grid-template-rows: 56px auto 64px;
+    grid-template-rows: 64px auto 64px;
 }
 
 .chat-row1 {
