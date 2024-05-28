@@ -5,12 +5,12 @@ import Settings from "./settings";
 
 function Messages() {
     const themes = {
-        "Default": "#5a00ff", // Deep purple
-        "Blue": "#3b82f6", // Blue 500
-        "Amber": "#ffbf00", // Amber 500
-        "Lime": "#84cc16", // Lime 500
-        "Yellow": "#facc15", // Yellow 500
-        "Orange": "#fb923c", // Orange 500
+        "Default": "#6A36EB",
+        "Blue": "#0E92EB",
+        "Amber": "#ffbf00",
+        "Lime": "#84cc16",
+        "Yellow": "#facc15",
+        "Orange": "#fb923c",
     };
 
     const [currentTheme, setCurrentTheme] = useState("Default");
