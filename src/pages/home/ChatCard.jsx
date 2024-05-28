@@ -1,4 +1,4 @@
-function Card() {
+function ChatCard() {
     return (
         <>
             <button className="h-15 w-full flex p-2 focus:bg-highlighted-grey hover:bg-highlighted-grey rounded-md">
@@ -19,4 +19,4 @@ function Card() {
     )
 }
 
-export default Card;
+export default ChatCard;
