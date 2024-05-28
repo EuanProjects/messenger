@@ -40,7 +40,7 @@ function Messages() {
 
     return (
         <>
-            <div className={`messages-grid ${showSettings ? 'w-4/6' : 'w-5/6'} h-full bg-grey rounded-xl shadow-inner`}>
+            <div className={`messages-grid ${showSettings ? 'w-4/6' : 'w-5/6'} h-full bg-grey rounded-xl shadow-lg`}>
                 <div className="flex justify-between p-3 drop-shadow-sm">
                     <div className="h-14 flex">
                         <div className="h-12 w-12 p-[6px]">

@@ -1,7 +1,10 @@
-import App from "../../App";
 import Create from "../create/create";
+import Chats from "../home/chats";
+import Friends from "../home/friends";
+import Home from "../home/home";
 import Login from "../login/login";
 import ErrorPage from "./errorpage";
+
 
 const routes = [
     {
@@ -15,9 +18,13 @@ const routes = [
       errorElement: <ErrorPage />,
     },
     {
-      path: "/messages",
-      element: <App />,
+      path: "/home",
+      element: <Home />,
       errorElement: <ErrorPage />,
+      children: [
+        { path: "chats", element: <Chats />},
+        { path: "friends", element: <Friends />}
+      ]
     },
     
 
