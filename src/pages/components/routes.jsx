@@ -1,9 +1,12 @@
 import Create from "../create/create";
+import EmptyChat from "../home/EmptyChat";
+import ChatDetail from "../home/chatDetail";
 import Chats from "../home/chats";
 import Friends from "../home/friends";
 import Home from "../home/home";
 import Login from "../login/login";
 import ErrorPage from "./errorpage";
+
 
 
 const routes = [
@@ -22,7 +25,10 @@ const routes = [
       element: <Home />,
       errorElement: <ErrorPage />,
       children: [
-        { path: "chats", element: <Chats />},
+        { path: "chats", element: <Chats />, children: [
+          {path: "", element: <EmptyChat />},
+          {path: ":chatId", element: <ChatDetail />},
+        ]},
         { path: "friends", element: <Friends />}
       ]
     },

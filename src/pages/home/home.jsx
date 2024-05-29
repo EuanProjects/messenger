@@ -3,9 +3,9 @@ import { Outlet } from "react-router-dom";
 
 function Home() {
     return (
-        <div className="h-screen w-screen flex gap-4 bg-dark-grey p-4">
-            <Navbar />
-            <Outlet />
+        <div className="h-screen w-screen flex flex-col md:flex-row gap-4 bg-dark-grey p-4">
+            <Navbar/>
+            <Outlet/>
         </div>
     )
 }

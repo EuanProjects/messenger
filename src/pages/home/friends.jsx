@@ -5,7 +5,7 @@ import FriendCard from "./friendcard"
 function Friends() {
     return (
         <>
-            <div className="chats-grid w-1/6 min-w-80 h-full bg-grey rounded-xl shadow-lg">
+            <div className="chats-grid md:order-2 w-[calc(100vw-32px)] md:w-1/6 md:min-w-80 h-[calc(100vh-100px)] md:h-full bg-grey rounded-xl shadow-lg">
                 <div className="chat-row1 w-full flex justify-between p-3 shadow-lg">
                     <h2 className="text-2xl font-bold text-light-grey">
                         Friends
@@ -25,7 +25,7 @@ function Friends() {
                 <div className="chat-row3 h-14 w-full flex justify-between p-3">
                 </div>
             </div>
-            <div className="bg-grey w-full h-full rounded-lg grid place-items-center shadow-lg">
+            <div className="hidden order-3 md:grid bg-grey w-full h-full rounded-lg place-items-center shadow-lg">
                 <div>
                     <h3 className="text-white text-center text-4xl font-bold text-wrap">Click on a friend to start a message!</h3>
                 </div>
