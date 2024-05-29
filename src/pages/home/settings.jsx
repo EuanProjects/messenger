@@ -31,7 +31,7 @@ function Settings({ themes, setCurrentTheme, currentTheme }) {
 
     return (
         <>
-            <div className="w-1/6 min-w-[250px] h-full bg-grey rounded-xl shadow-inner flex flex-col">
+            <div className="order-4 w-1/6 min-w-[250px] h-full bg-grey rounded-xl shadow-inner flex flex-col">
                 <div className="w-full">
                     <div className="h-24 w-24 rounded-full bg-light-grey mx-auto mt-3"></div>
                     <h2 className="text-xl text-center mt-1 text-white">Example Chat</h2>

@@ -6,7 +6,7 @@ import Friends from "../home/friends";
 import Home from "../home/home";
 import Login from "../login/login";
 import ErrorPage from "./errorpage";
-
+import Messages from "../home/messages"
 
 
 const routes = [
@@ -27,7 +27,7 @@ const routes = [
       children: [
         { path: "chats", element: <Chats />, children: [
           {path: "", element: <EmptyChat />},
-          {path: ":chatId", element: <ChatDetail />},
+          {path: ":chatId", element: <Messages />},
         ]},
         { path: "friends", element: <Friends />}
       ]
