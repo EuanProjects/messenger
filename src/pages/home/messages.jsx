@@ -40,7 +40,7 @@ function Messages() {
 
     return (
         <>
-            <div className={`messages-grid order-3 ${showSettings ? 'w-4/6' : 'w-5/6'} h-full bg-grey rounded-xl shadow-lg`}>
+            <div className={`order-1 md:order-3 ${showSettings ? 'hidden md:messages-grid md:w-4/6' : 'messages-grid w-full md:w-5/6'} h-[calc(100vh-92px)] md:h-full bg-grey rounded-xl shadow-lg`}>
                 <div className="flex justify-between p-3 drop-shadow-sm">
                     <div className="h-14 flex">
                         <div className="h-12 w-12 p-[6px]">
@@ -103,7 +103,7 @@ function Messages() {
                 </div>
             </div>
             {showSettings && (
-                <Settings themes={themes} setCurrentTheme={setCurrentTheme} currentTheme={currentTheme} />
+                <Settings themes={themes} setCurrentTheme={setCurrentTheme} currentTheme={currentTheme} handleShowSettings={handleShowSettings} />
             )}
         </>
     );
