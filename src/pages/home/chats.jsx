@@ -1,7 +1,7 @@
 import { PlusSquare } from "react-feather";
 import './styles/chats.css'
 import ChatCard from "./ChatCard";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { useState } from "react";
 import FriendCard from "./friendcard";
 
@@ -9,19 +9,21 @@ import FriendCard from "./friendcard";
 
 function Chats() {
     const [displayNewChat, setDisplayNewChat] = useState(false);
-    const [newChatSelected, setNewChatSelected] = useState(true);
-
+    const [newChatSelected, setNewChatSelected] = useState(false);
+    const url = useLocation().pathname;
+    const isNotDisplayingMessages = url === "/home/chats";
+    console.log(displayNewChat)
     
     function handleDisplayNewChat() {
         setDisplayNewChat(!displayNewChat);
     }
 
     function handleNewChatSelected() {
-        setNewChatSelected(!newChatSelected);
+        // setNewChatSelected(!newChatSelected);
     }
     return (
         <>
-            <div className="chats-grid md:order-2 w-[calc(100vw-32px)] md:w-1/6 md:min-w-80 h-[calc(100vh-100px)] md:h-full bg-grey rounded-xl shadow-lg" onClick={handleDisplayNewChat}>
+            <div className={`${isNotDisplayingMessages ? "chats-grid md:order-2" : "hidden md:chats-grid md:order-2"} w-[calc(100vw-32px)] md:w-1/6 md:min-w-80 h-[calc(100vh-100px)] md:h-full bg-grey rounded-xl shadow-lg`} onClick={handleDisplayNewChat}>
                 <div className="chat-row1 w-full flex justify-between p-3">
                     <h2 className="text-2xl font-bold text-light-grey">
                         Chats

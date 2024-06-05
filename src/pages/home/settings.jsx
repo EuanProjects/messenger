@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Check, ChevronRight } from "react-feather";
+import { Check, ChevronLeft, ChevronRight, X } from "react-feather";
 import "./styles/settings.css";
 
-function Settings({ themes, setCurrentTheme, currentTheme }) {
+function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings }) {
     const [showChatSettings, setShowChatSettings] = useState(false);
     const [showParticipants, setShowParticipants] = useState(false);
     const [showChangeThemes, setShowChangeThemes] = useState(false);
@@ -31,7 +31,15 @@ function Settings({ themes, setCurrentTheme, currentTheme }) {
 
     return (
         <>
-            <div className="order-4 w-1/6 min-w-[250px] h-full bg-grey rounded-xl shadow-inner flex flex-col">
+            <div className="order-1 md:order-4 w-full md:w-1/6 md:min-w-[250px] h-full bg-grey rounded-xl shadow-inner flex flex-col">
+                <div className="flex justify-start p-2">
+                    <button className="bg-highlighted-grey rounded-full h-6 w-6 text-white m-3"
+                        onClick={handleShowSettings}>
+                        <ChevronLeft style={{
+                            stroke: themes[selectedTheme],
+                        }} />
+                    </button>
+                </div>
                 <div className="w-full">
                     <div className="h-24 w-24 rounded-full bg-light-grey mx-auto mt-3"></div>
                     <h2 className="text-xl text-center mt-1 text-white">Example Chat</h2>
