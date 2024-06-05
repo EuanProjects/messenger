@@ -19,7 +19,7 @@ function Chats() {
     }
 
     function handleNewChatSelected() {
-        setNewChatSelected(!newChatSelected);
+        // setNewChatSelected(!newChatSelected);
     }
     return (
         <>
@@ -42,7 +42,7 @@ function Chats() {
             </div>
             <Outlet />
             {
-                !displayNewChat &&
+                displayNewChat &&
                 <>
                     <div className="h-screen w-screen grid place-items-center shadow-sm bg-black/70 absolute top-0 left-0" onClick={handleDisplayNewChat}>
                         <div className="settings-grid relative w-1/2 h-3/4 max-h-[700px] max-w-[637px] rounded-lg bg-grey opacity-100" onClick={(e) => e.stopPropagation()}>
