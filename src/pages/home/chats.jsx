@@ -2,18 +2,62 @@ import { PlusSquare } from "react-feather";
 import './styles/chats.css'
 import ChatCard from "./ChatCard";
 import { Outlet, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FriendCard from "./friendcard";
+import { useParams } from 'react-router-dom';
+/*
+    useEffect(() => {
+        async function checkUser() {
+            try {
+                const response = await fetch('http://localhost:3000/auth/user', {
+                    mode: 'cors',
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                if (!response.ok) {
+                    // please fix this later lol
+                    navigate("/login");
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
 
 
+        checkUser()
+        fetchData();
+    }, [navigate])
+*/
 
 function Chats() {
+    const API_URL = import.meta.env.VITE_API_URL
     const [displayNewChat, setDisplayNewChat] = useState(false);
     const [newChatSelected, setNewChatSelected] = useState(false);
     const url = useLocation().pathname;
     const isNotDisplayingMessages = url === "/home/chats";
-    console.log(displayNewChat)
-    
+    const [chats, setChats] = useState([]);
+
+    useEffect(() => {
+        async function getChats() {
+            try {
+                const response = await fetch(`http://${API_URL}/conversation/profile/6662212e411d37339fb2dd98`, {
+                    mode: 'cors',
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await response.json();
+                setChats(data);
+
+            } catch (error) {
+                console.error("Error fetching data: ", error)
+            }
+        }
+
+        getChats();
+    }, [API_URL])
+
     function handleDisplayNewChat() {
         setDisplayNewChat(!displayNewChat);
     }
@@ -21,6 +65,8 @@ function Chats() {
     function handleNewChatSelected() {
         // setNewChatSelected(!newChatSelected);
     }
+
+    console.log(chats);
     return (
         <>
             <div className={`${isNotDisplayingMessages ? "chats-grid md:order-2" : "hidden md:chats-grid md:order-2"} w-[calc(100vw-32px)] md:w-1/6 md:min-w-80 h-[calc(100vh-100px)] md:h-full bg-grey rounded-xl shadow-lg`} onClick={handleDisplayNewChat}>
@@ -33,8 +79,14 @@ function Chats() {
                     </button>
                 </div>
                 <div className="h-full w-full overflow-auto border-t-2 border-b-2 border-highlighted-grey">
-                    <ChatCard />
-                    <ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard /><ChatCard />
+                    {
+                        chats.map(chat => (
+                            <>
+                                <ChatCard chat={chat}/>
+                            </>
+                        ))
+                    }
+
                 </div>
                 <div className="chat-row3 h-14 w-full flex justify-between p-3">
                 </div>
@@ -53,13 +105,13 @@ function Chats() {
                             </div>
                             <div className="overflow-y-auto grid p-4">
                                 <div className="overflow-auto">
-                                    <FriendCard onClick={handleNewChatSelected}/>
-                                    <FriendCard onClick={handleNewChatSelected}/>
-                                    <FriendCard onClick={handleNewChatSelected}/>
-                                    <FriendCard onClick={handleNewChatSelected}/>
-                                    <FriendCard onClick={handleNewChatSelected}/>
-                                    <FriendCard onClick={handleNewChatSelected}/>
-                                    <FriendCard onClick={handleNewChatSelected}/>
+                                    <FriendCard onClick={handleNewChatSelected} />
+                                    <FriendCard onClick={handleNewChatSelected} />
+                                    <FriendCard onClick={handleNewChatSelected} />
+                                    <FriendCard onClick={handleNewChatSelected} />
+                                    <FriendCard onClick={handleNewChatSelected} />
+                                    <FriendCard onClick={handleNewChatSelected} />
+                                    <FriendCard onClick={handleNewChatSelected} />
 
                                 </div>
                             </div>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Check, ChevronLeft, ChevronRight, X } from "react-feather";
 import "./styles/settings.css";
 
-function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings }) {
+function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, chatId, API_URL }) {
     const [showChatSettings, setShowChatSettings] = useState(false);
     const [showParticipants, setShowParticipants] = useState(false);
     const [showChangeThemes, setShowChangeThemes] = useState(false);
@@ -24,7 +24,25 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings })
         setNewThemeSelected(true);
     }
 
-    function handleConfirmTheme() {
+    async function handleConfirmTheme() {
+        try {
+            console.log("here???");
+            const response = await fetch(`http://${API_URL}/conversation/${chatId}/theme`, {
+                mode: 'cors',
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "theme": selectedTheme
+                })
+            
+            });
+            const data = await response.json();
+
+        } catch (error) {
+            console.error("Error fetching data: ", error)
+        }
         setCurrentTheme(selectedTheme);
         setShowChangeThemes(false);
     }

@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { MoreHorizontal, Image, Send } from "react-feather";
+import { useParams } from "react-router-dom";
 import "./styles/messages.css";
 import Settings from "./settings";
 
 function Messages() {
+    const API_URL = import.meta.env.VITE_API_URL
+    const { chatId } = useParams();
     const themes = {
         "Default": "#6A36EB",
         "Blue": "#0E92EB",
@@ -20,16 +23,62 @@ function Messages() {
         setShowSettings(!showSettings);
     }
 
-    const messages = [
-        { text: 'Message 1 what if it is really long and wnats to ggrow super far? will it just keep going?', date: '2024-05-10T12:30:00', pid: "1" },
-        { text: 'Me', date: '2024-05-10T15:45:00', pid: "2" },
-        { text: 'Message 3', date: '2024-05-11T09:20:00', pid: "1" },
-        { text: 'This is a a really reandom thype of testing becauser i just want to see what wil happen 4 alskjdf;laskjd as;ldkfja sl;kjasd ;alksjdfal;ksjf ', date: '2024-05-11T13:10:00', pid: "2" },
-        { text: 'Message 5', date: '2024-05-12T08:55:00', pid: "2" }
-    ];
-    for (let i = 0; i < 100; i++) {
-        messages.push({ text: 'Message 5', date: '2024-05-12T08:55:00', pid: "2" });
-    }
+    const messages = [];
+    // const messages = [
+    //     { text: 'Message 1 what if it is really long and wnats to ggrow super far? will it just keep going?', date: '2024-05-10T12:30:00', pid: "1" },
+    //     { text: 'Me', date: '2024-05-10T15:45:00', pid: "2" },
+    //     { text: 'Message 3', date: '2024-05-11T09:20:00', pid: "1" },
+    //     { text: 'This is a a really reandom thype of testing becauser i just want to see what wil happen 4 alskjdf;laskjd as;ldkfja sl;kjasd ;alksjdfal;ksjf ', date: '2024-05-11T13:10:00', pid: "2" },
+    //     { text: 'Message 5', date: '2024-05-12T08:55:00', pid: "2" }
+    // ];
+
+    // for (let i = 0; i < 100; i++) {
+    //     messages.push({ text: 'Message 5', date: '2024-05-12T08:55:00', pid: "2" });
+    // }
+
+    useEffect(() => {
+        async function getCurrentChats() {
+            try {
+                const response = await fetch(`http://${API_URL}/conversation/6662212e411d37339fb2dd98`, {
+                    mode: 'cors',
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await response.json();
+                setChats(data);
+
+            } catch (error) {
+                console.error("Error fetching data: ", error)
+            }
+        }
+
+        async function getChat() {
+            try {
+                const response = await fetch(`http://${API_URL}/conversation/${chatId}`, {
+                    mode: 'cors',
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await response.json();
+                setCurrentTheme(data.theme);
+
+            } catch (error) {
+                console.error("Error fetching data: ", error)
+            }
+        }
+
+
+
+        if (chatId) {
+            console.log("in here")
+            getChat();
+        // getCurrentChats();
+        }
+    }, [])
 
     const groupedMessages = messages.reduce((acc, message) => {
         const date = new Date(message.date).toISOString().split('T')[0];
@@ -37,6 +86,8 @@ function Messages() {
         acc[date].push(message);
         return acc;
     }, {});
+
+
 
     return (
         <>
@@ -103,7 +154,7 @@ function Messages() {
                 </div>
             </div>
             {showSettings && (
-                <Settings themes={themes} setCurrentTheme={setCurrentTheme} currentTheme={currentTheme} handleShowSettings={handleShowSettings} />
+                <Settings themes={themes} setCurrentTheme={setCurrentTheme} currentTheme={currentTheme} handleShowSettings={handleShowSettings} chatId={chatId} API_URL={API_URL}/>
             )}
         </>
     );
