@@ -17,6 +17,7 @@ function Messages() {
     };
 
     const [currentTheme, setCurrentTheme] = useState("Default");
+    const [participants, setParticipants] = useState([]);
     const [showSettings, setShowSettings] = useState(false);
 
     function handleShowSettings() {
@@ -65,6 +66,7 @@ function Messages() {
                 });
                 const data = await response.json();
                 setCurrentTheme(data.theme);
+                setParticipants(data.profileIds);
 
             } catch (error) {
                 console.error("Error fetching data: ", error)
@@ -76,7 +78,7 @@ function Messages() {
         if (chatId) {
             console.log("in here")
             getChat();
-        // getCurrentChats();
+            // getCurrentChats();
         }
     }, [])
 
@@ -98,7 +100,13 @@ function Messages() {
                             <div className="h-9 w-9 bg-white rounded-full"></div>
                         </div>
                         <div className="ml-1 text-light-grey">
-                            <span className="text-left block font-bold">Name</span>
+                            <span className="text-left block font-bold">
+                                {
+                                    participants.map(profile => (
+                                        <span key={profile._id}>{`${profile.username}, `}</span>
+                                    ))
+                                }
+                            </span>
                             <span className="block">Online</span>
                         </div>
                     </div>
@@ -154,7 +162,7 @@ function Messages() {
                 </div>
             </div>
             {showSettings && (
-                <Settings themes={themes} setCurrentTheme={setCurrentTheme} currentTheme={currentTheme} handleShowSettings={handleShowSettings} chatId={chatId} API_URL={API_URL}/>
+                <Settings themes={themes} setCurrentTheme={setCurrentTheme} currentTheme={currentTheme} handleShowSettings={handleShowSettings} chatId={chatId} API_URL={API_URL} participants={participants} />
             )}
         </>
     );

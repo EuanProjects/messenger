@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Check, ChevronLeft, ChevronRight, X } from "react-feather";
 import "./styles/settings.css";
 
-function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, chatId, API_URL }) {
+function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, chatId, API_URL, participants }) {
     const [showChatSettings, setShowChatSettings] = useState(false);
     const [showParticipants, setShowParticipants] = useState(false);
     const [showChangeThemes, setShowChangeThemes] = useState(false);
@@ -24,6 +24,10 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
         setNewThemeSelected(true);
     }
 
+    function handleParticipants() {
+        setShowParticipants(!showParticipants);
+    }
+
     async function handleConfirmTheme() {
         try {
             console.log("here???");
@@ -36,7 +40,7 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                 body: JSON.stringify({
                     "theme": selectedTheme
                 })
-            
+
             });
             const data = await response.json();
 
@@ -47,6 +51,7 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
         setShowChangeThemes(false);
     }
 
+    console.log(participants)
     return (
         <>
             <div className="order-1 md:order-4 w-full md:w-1/6 md:min-w-[250px] h-full bg-grey rounded-xl shadow-inner flex flex-col">
@@ -88,10 +93,27 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                             </button>
                         </>
                     }
-                    <button className="w-full flex justify-between h-12 place-items-center rounded-lg px-2 hover:bg-highlighted-grey">
+                    <button className="w-full flex justify-between h-12 place-items-center rounded-lg px-2 hover:bg-highlighted-grey" onClick={handleParticipants}>
                         <p>Participants</p>
-                        <ChevronRight />
+                        <ChevronRight className={`${showParticipants ? "rotate-90" : ""}`} />
                     </button>
+                    {
+                        showParticipants &&
+                        <>
+                            {
+                                participants.map(particpant => (
+                                    <>
+                                        <button className="h-12 w-full px-3 flex gap-2 hover:bg-highlighted-grey place-items-center rounded-lg"
+                                            onClick={handleShowThemesClick}>
+                                            <div>
+                                                {particpant.username}
+                                            </div>
+                                        </button>
+                                    </>
+                                ))
+                            }
+                        </>
+                    }
                 </div>
             </div>
             {
