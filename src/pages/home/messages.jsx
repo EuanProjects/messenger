@@ -171,10 +171,10 @@ function Messages() {
                                                 {!isGrouped ? (
                                                     <div className={`rounded-full bg-white h-9 w-9 self-end mb-3 ${message.profileId._id !== '6662212e411d37339fb2dd98' ? "recieved-message-profile ml-1" : "hidden"}`}></div>
                                                 ) :
-                                                (
-                                                    <div className={`w-full h-full recieved-message-profile`}></div>
-                                                )
-                                            } 
+                                                    (
+                                                        <div className={`w-full h-full recieved-message-profile`}></div>
+                                                    )
+                                                }
                                             </div>
 
                                         </>
@@ -183,7 +183,7 @@ function Messages() {
                             </div>
                         </div>
                     ))}
-                                    <div className="bg-white w-full h-12 pb-2" ref={paragraphRef} />
+                    <div className="bg-white w-full h-24 pb-2" ref={paragraphRef} />
                 </div>
                 <div className="flex justify-between p-3">
                     <div className="p-[6px] h-10 w-10">
