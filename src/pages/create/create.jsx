@@ -4,13 +4,6 @@ import { Link, useNavigate } from "react-router-dom"
 
 function Create() {
     const API_URL = import.meta.env.VITE_API_URL
-    /*
-        get fields that I need
-
-        username
-        password
-        confirm password
-    */
     const [username, setUsername] = useState("");
     const [usernameError, setUsernameError] = useState("");
     const [password, setPassword] = useState("");
