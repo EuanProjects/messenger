@@ -18,7 +18,7 @@
 
 .message-group-sent {
     display: grid;
-    grid-template-columns: auto 40px;
+    grid-template-columns: auto;
     gap: 12px;
 }
 

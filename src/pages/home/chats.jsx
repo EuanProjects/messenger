@@ -66,7 +66,6 @@ function Chats() {
         // setNewChatSelected(!newChatSelected);
     }
 
-    console.log(chats);
     return (
         <>
             <div className={`${isNotDisplayingMessages ? "chats-grid md:order-2" : "hidden md:chats-grid md:order-2"} w-[calc(100vw-32px)] md:w-1/6 md:min-w-80 h-[calc(100vh-100px)] md:h-full bg-grey rounded-xl shadow-lg`} onClick={handleDisplayNewChat}>

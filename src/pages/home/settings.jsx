@@ -30,7 +30,6 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
 
     async function handleConfirmTheme() {
         try {
-            console.log("here???");
             const response = await fetch(`http://${API_URL}/conversation/${chatId}/theme`, {
                 mode: 'cors',
                 method: 'PUT',
@@ -51,7 +50,6 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
         setShowChangeThemes(false);
     }
 
-    console.log(participants)
     return (
         <>
             <div className="order-1 md:order-4 w-full md:w-1/6 md:min-w-[250px] h-full bg-grey rounded-xl shadow-inner flex flex-col">
@@ -100,7 +98,7 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                     {
                         showParticipants &&
                         <>
-                            {
+                            {/* {
                                 participants.map(particpant => (
                                     <>
                                         <button className="h-12 w-full px-3 flex gap-2 hover:bg-highlighted-grey place-items-center rounded-lg"
@@ -111,7 +109,7 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                                         </button>
                                     </>
                                 ))
-                            }
+                            } */}
                         </>
                     }
                 </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { MoreHorizontal, Image, Send } from "react-feather";
 import { useParams } from "react-router-dom";
 import "./styles/messages.css";
@@ -15,46 +15,46 @@ function Messages() {
         "Yellow": "#facc15",
         "Orange": "#fb923c",
     };
-
+    const paragraphRef = useRef(null);
     const [currentTheme, setCurrentTheme] = useState("Default");
     const [participants, setParticipants] = useState([]);
     const [showSettings, setShowSettings] = useState(false);
+    const [messages, setMessages] = useState([]);
+    const [messageInput, setMessageInput] = useState("");
+    const [refresh, setRefresh] = useState(false);
 
     function handleShowSettings() {
         setShowSettings(!showSettings);
     }
 
-    const messages = [];
-    // const messages = [
-    //     { text: 'Message 1 what if it is really long and wnats to ggrow super far? will it just keep going?', date: '2024-05-10T12:30:00', pid: "1" },
-    //     { text: 'Me', date: '2024-05-10T15:45:00', pid: "2" },
-    //     { text: 'Message 3', date: '2024-05-11T09:20:00', pid: "1" },
-    //     { text: 'This is a a really reandom thype of testing becauser i just want to see what wil happen 4 alskjdf;laskjd as;ldkfja sl;kjasd ;alksjdfal;ksjf ', date: '2024-05-11T13:10:00', pid: "2" },
-    //     { text: 'Message 5', date: '2024-05-12T08:55:00', pid: "2" }
-    // ];
+    function handleMessageInputChange(e) {
+        setMessageInput(e.target.value)
+    }
 
-    // for (let i = 0; i < 100; i++) {
-    //     messages.push({ text: 'Message 5', date: '2024-05-12T08:55:00', pid: "2" });
-    // }
+    async function handleSendMessage(e) {
+        try {
+            const response = await fetch(`http://${API_URL}/message/${chatId}`, {
+                mode: 'cors',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: messageInput,
+                    profileId: "6662212e411d37339fb2dd98"
+                })
+            });
+
+            const data = await response.json();
+            console.log(data);
+            setMessageInput("");
+            setRefresh(!refresh);
+        } catch (error) {
+            console.error("Error fetching data: ", error)
+        }
+    }
 
     useEffect(() => {
-        async function getCurrentChats() {
-            try {
-                const response = await fetch(`http://${API_URL}/conversation/6662212e411d37339fb2dd98`, {
-                    mode: 'cors',
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                const data = await response.json();
-                setChats(data);
-
-            } catch (error) {
-                console.error("Error fetching data: ", error)
-            }
-        }
-
         async function getChat() {
             try {
                 const response = await fetch(`http://${API_URL}/conversation/${chatId}`, {
@@ -68,6 +68,28 @@ function Messages() {
                 setCurrentTheme(data.theme);
                 setParticipants(data.profileIds);
 
+
+            } catch (error) {
+                console.error("Error fetching data: ", error)
+            }
+        }
+
+        async function getMessages() {
+            console.log("getting messages")
+            try {
+                const response = await fetch(`http://${API_URL}/message/${chatId}`, {
+                    mode: 'cors',
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await response.json();
+                setMessages(data);
+                paragraphRef.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                })
             } catch (error) {
                 console.error("Error fetching data: ", error)
             }
@@ -76,14 +98,15 @@ function Messages() {
 
 
         if (chatId) {
-            console.log("in here")
-            getChat();
-            // getCurrentChats();
+            if (participants.length === 0) {
+                getChat();
+            }
+            getMessages();
         }
-    }, [])
+    }, [API_URL, chatId, participants.length, refresh])
 
     const groupedMessages = messages.reduce((acc, message) => {
-        const date = new Date(message.date).toISOString().split('T')[0];
+        const date = new Date(message.timestamp).toISOString().split('T')[0];
         acc[date] = acc[date] || [];
         acc[date].push(message);
         return acc;
@@ -128,37 +151,53 @@ function Messages() {
                             <div>
                                 {messages.map((message, index) => {
                                     const nextMessage = index < messages.length - 1 ? messages[index + 1] : null;
-                                    const isGrouped = nextMessage && nextMessage.pid === message.pid;
+                                    const isGrouped = nextMessage && nextMessage.profileId._id === message.profileId._id;
                                     return (
-                                        <div key={`${date}-${index}`} className={`w-full ${message.pid === "2" ? "message-group-sent" : "message-group-recieved"}`}>
-                                            <div
-                                                style={{
-                                                    backgroundColor: message.pid === '2' ? themes[currentTheme] : '#3c3c3c'
-                                                }}
-                                                className={`rounded-lg min-w-[100px] max-w-[75%] my-3 py-2 px-3  text-white ${message.pid === '2' ? 'justify-self-end' : 'justify-self-start'}`}
-                                            >
-                                                {message.text}
+                                        <>
+                                            <div key={`${date}-${index}`} className={`w-full ${message.profileId._id === "6662212e411d37339fb2dd98" ? "message-group-sent" : "message-group-recieved"}`}>
+                                                <div className={`grid ${message.profileId._id === '6662212e411d37339fb2dd98' ? 'justify-self-end' : 'justify-self-start'}`}>
+                                                    <div className={`text-light-grey ${message.profileId._id === '6662212e411d37339fb2dd98' ? 'hidden' : 'justify-self-start'}`}>
+                                                        {message.profileId.username}
+                                                    </div>
+                                                    <div
+                                                        style={{
+                                                            backgroundColor: message.profileId._id === '6662212e411d37339fb2dd98' ? themes[currentTheme] : '#3c3c3c'
+                                                        }}
+                                                        className={`rounded-lg min-w-[100px] max-w-full my-3 py-2 px-3  text-white`}
+                                                    >
+                                                        {message.message}
+                                                    </div>
+                                                </div>
+                                                {!isGrouped ? (
+                                                    <div className={`rounded-full bg-white h-9 w-9 self-end mb-3 ${message.profileId._id !== '6662212e411d37339fb2dd98' ? "recieved-message-profile ml-1" : "hidden"}`}></div>
+                                                ) :
+                                                (
+                                                    <div className={`w-full h-full recieved-message-profile`}></div>
+                                                )
+                                            } 
                                             </div>
-                                            {!isGrouped && (
-                                                <div className={`rounded-full bg-white h-9 w-9 self-end mb-3 ${message.pid === "1" ? "recieved-message-profile ml-1" : "mr-3"}`}></div>
-                                            )}
-                                        </div>
+
+                                        </>
                                     );
                                 })}
                             </div>
                         </div>
                     ))}
+                                    <div className="bg-white w-full h-12 pb-2" ref={paragraphRef} />
                 </div>
                 <div className="flex justify-between p-3">
                     <div className="p-[6px] h-10 w-10">
                         <Image style={{ stroke: themes[currentTheme] }} />
                     </div>
                     <div className="grid place-items-center grow">
-                        <input className="w-full rounded-full bg-highlighted-grey" type="text" />
+                        <input className="w-full rounded-full bg-highlighted-grey text-white px-4" type="text"
+                            value={messageInput}
+                            onChange={handleMessageInputChange}
+                        />
                     </div>
-                    <div className="p-[6px] h-10 w-10">
+                    <button className="p-[6px] h-10 w-10" type="button" onClick={(e) => handleSendMessage(e)}>
                         <Send style={{ stroke: themes[currentTheme], transform: 'rotate(45deg)' }} />
-                    </div>
+                    </button>
                 </div>
             </div>
             {showSettings && (
