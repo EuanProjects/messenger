@@ -7,6 +7,7 @@ import Home from "../home/home";
 import Login from "../login/login";
 import ErrorPage from "./errorpage";
 import Messages from "../home/messages"
+import Setup from "../setup/setup";
 
 
 const routes = [
@@ -21,15 +22,20 @@ const routes = [
       errorElement: <ErrorPage />,
     },
     {
+      path: "profile/:profileId/setup",
+      element: <Setup />,
+      errorElement: <ErrorPage />
+    },
+    {
       path: "/home",
       element: <Home />,
       errorElement: <ErrorPage />,
       children: [
-        { path: "chats", element: <Chats />, children: [
+        { path: "profile/:profileId/chats", element: <Chats />, children: [
           {path: "", element: <EmptyChat />},
           {path: ":chatId", element: <Messages />},
         ]},
-        { path: "friends", element: <Friends />}
+        { path: "profile/:profileId/friends", element: <Friends />}
       ]
     },
     

@@ -6,6 +6,7 @@ function Login() {
     const API_URL = import.meta.env.VITE_API_URL;
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
     async function handleLoginSubmit(e) {
@@ -25,13 +26,22 @@ function Login() {
             });
 
             const data = await response.json();
-            localStorage.setItem('token', data.token);
-            if (data.setup) {
-                navigate("/home/chats");
+            if (!response.ok) {
+                setMessage(data.message);
             } else {
-                // go to setup page
-                console.log("Going to setup page");
+                localStorage.setItem('token', data.token);
+                console.log(data);
+                console.log("here");
+                if (data.setup) {
+                    navigate(`/home/profile/${data.profileId}/chats`);
+                } else {
+                    // go to setup page
+                    navigate(`/profile/${data.profileId}/setup`);
+                    console.log("Going to setup page");
+                }
             }
+
+
 
         } catch (error) {
             console.error("Error fetching data: ", error)
@@ -44,9 +54,10 @@ function Login() {
                 <h1 className="text-5xl text-deep-purple font-bold  mb-2">Messenger</h1>
                 <MessageSquare className="stroke-deep-purple fill-deep-purple" size={48}/>
             </div>
-            <form className="h-[350px] w-[318px] bg-grey rounded-lg shadow-lg p-4 flex flex-col place-items-center"
+            <form className="h-[390px] w-[318px] bg-grey rounded-lg shadow-lg p-4 flex flex-col place-items-center"
                 onSubmit={handleLoginSubmit}> 
                 <legend className="text-white text-center text-2xl mb-2 font-bold">Login</legend>
+                <span className="text-red-500">{message}</span>
                 <p className="text-white grid mb-1">
                     <label className="mr-4" htmlFor="">Username</label>
                     <input type="text" className="w-[250px] px-2 text-dark-grey" onChange={(e) => setUsername(e.target.value)}/>

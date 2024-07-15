@@ -29,12 +29,14 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
     }
 
     async function handleConfirmTheme() {
+        const token = localStorage.getItem("token");
         try {
             const response = await fetch(`http://${API_URL}/conversation/${chatId}/theme`, {
                 mode: 'cors',
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     "theme": selectedTheme
