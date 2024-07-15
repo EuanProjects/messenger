@@ -56,12 +56,14 @@ function Messages() {
 
     useEffect(() => {
         async function getChat() {
+            const token = localStorage.getItem("token");
             try {
                 const response = await fetch(`http://${API_URL}/conversation/${chatId}`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
                     },
                 });
                 const data = await response.json();
@@ -88,7 +90,6 @@ function Messages() {
                 setMessages(data);
                 paragraphRef.current.scrollIntoView({
                     behavior: "smooth",
-                    block: "start"
                 })
             } catch (error) {
                 console.error("Error fetching data: ", error)
@@ -183,7 +184,7 @@ function Messages() {
                             </div>
                         </div>
                     ))}
-                    <div className="bg-white w-full h-24 pb-2" ref={paragraphRef} />
+                    <div className="bg-white w-full h-2 pb-2" ref={paragraphRef} />
                 </div>
                 <div className="flex justify-between p-3">
                     <div className="p-[6px] h-10 w-10">

@@ -1,10 +1,10 @@
 import { PlusSquare } from "react-feather";
 import './styles/chats.css'
 import ChatCard from "./ChatCard";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import FriendCard from "./friendcard";
-import { useParams } from 'react-router-dom';
+
 /*
     useEffect(() => {
         async function checkUser() {
@@ -34,20 +34,29 @@ function Chats() {
     const [displayNewChat, setDisplayNewChat] = useState(false);
     const [newChatSelected, setNewChatSelected] = useState(false);
     const url = useLocation().pathname;
+    const profileId = useParams()
+    console.log(profileId);
     const isNotDisplayingMessages = url === "/home/chats";
     const [chats, setChats] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function getChats() {
+            const token = localStorage.getItem("token")
             try {
                 const response = await fetch(`http://${API_URL}/conversation/profile/6662212e411d37339fb2dd98`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
                     },
                 });
+                if (!response.ok) {
+                    navigate("/");
+                }
                 const data = await response.json();
+                console.log(data);
                 setChats(data);
 
             } catch (error) {
@@ -56,7 +65,7 @@ function Chats() {
         }
 
         getChats();
-    }, [API_URL])
+    }, [API_URL, profileId])
 
     function handleDisplayNewChat() {
         setDisplayNewChat(!displayNewChat);
