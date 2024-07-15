@@ -1,18 +1,62 @@
 import { PlusSquare } from "react-feather"
 import "./styles/chats.css"
 import FriendCard from "./friendcard"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom";
 
 function Friends() {
     const [displayFindNewFriend, setDisplayFindNewFriend] = useState(false);
     const [newFriendSelected, setNewFriendSelected] = useState(false);
+    const [allPeopleOnMessenger, setAllPeopleOnMessenger] = useState([]);
+    const API_URL = import.meta.env.VITE_API_URL;
+    const {profileId} = useParams();
+    useEffect(() => {
+        async function getPeopleOnMessenger() {
+            try {
+                const response = await fetch(`http://${API_URL}/profile`, {
+                    mode: 'cors',
+                    method: 'GET',
+                })
+
+                const data = await response.json();
+                setAllPeopleOnMessenger(data);
+            } catch (error) {
+                console.error("Error trying to get data", error);
+            }
+        }
+
+        getPeopleOnMessenger();
+    }, [API_URL])
 
     function handleFindNewFriend() {
         setDisplayFindNewFriend(!displayFindNewFriend)
     }
 
-    function handleNewFriendSelected() {
+    function handleNewFriendSelected(friendId) {
+
+        console.log(profileId, friendId);
         setNewFriendSelected(!newFriendSelected)
+    }
+
+    async function handleSendAddRequest() {
+        try {
+            const response = await fetch(`http://${API_URL}/request`, {
+                mode: 'cors',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        
+                    }
+                )
+            });
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error("Error sending request: ", error)
+        }
     }
 
     return (
@@ -28,10 +72,10 @@ function Friends() {
                 </div>
                 <div className="h-full w-full overflow-auto border-t-2 border-b-2 border-highlighted-grey">
                     <div>
+                        {/* <FriendCard />
                         <FriendCard />
                         <FriendCard />
-                        <FriendCard />
-                        <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard />
+                        <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> */}
                     </div>
                 </div>
                 <div className="chat-row3 h-14 w-full flex justify-between p-3">
@@ -54,13 +98,11 @@ function Friends() {
                             </div>
                             <div className="overflow-y-auto grid p-4">
                                 <div className="overflow-auto">
-                                    <FriendCard onClick={handleNewFriendSelected}/>
-                                    <FriendCard onClick={handleNewFriendSelected}/>
-                                    <FriendCard onClick={handleNewFriendSelected}/>
-                                    <FriendCard onClick={handleNewFriendSelected}/>
-                                    <FriendCard onClick={handleNewFriendSelected}/>
-                                    <FriendCard onClick={handleNewFriendSelected}/>
-                                    <FriendCard onClick={handleNewFriendSelected}/>
+                                    {
+                                        allPeopleOnMessenger.map((person) => (
+                                            <FriendCard key={person._id} person={person} onClick={() => {handleNewFriendSelected(person._id)}} />
+                                        ))
+                                    }
 
                                 </div>
                             </div>
@@ -68,7 +110,7 @@ function Friends() {
                                 <button className="bg-highlighted-grey rounded-lg" onClick={handleFindNewFriend}>
                                     Cancel
                                 </button>
-                                <button className="bg-highlighted-grey rounded-lg" onClick={handleFindNewFriend}>
+                                <button className="bg-highlighted-grey rounded-lg" onClick={handleSendAddRequest}>
                                     Add
                                 </button>
 
