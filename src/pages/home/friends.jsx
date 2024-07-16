@@ -1,6 +1,7 @@
 import { PlusSquare } from "react-feather"
 import "./styles/chats.css"
-import FriendCard from "./friendcard"
+import FriendRequestCard from "./friendRequestCard"
+import FriendCard from "./friendCard"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom";
 
@@ -10,6 +11,7 @@ function Friends() {
     const [allPeopleOnMessenger, setAllPeopleOnMessenger] = useState([]);
     const [friends, setFriends] = useState([]);
     const [requests, setRequests] = useState();
+    const [action, setAction] = useState(false);
     const API_URL = import.meta.env.VITE_API_URL;
     const { profileId } = useParams();
 
@@ -45,6 +47,7 @@ function Friends() {
         }
 
         async function getFriends() {
+            console.log("getting friends");
             try {
                 const response = await fetch(`http://${API_URL}/profile/${profileId}/friends`, {
                     mode: 'cors',
@@ -52,7 +55,6 @@ function Friends() {
                 })
                 const data = await response.json();
                 setFriends(data);
-                console.log(data);
             } catch (error) {
                 console.error("Error trying to get friends: ", error);
             }
@@ -61,7 +63,7 @@ function Friends() {
         getPeopleOnMessenger();
         getRequests();
         getFriends();
-    }, [])
+    }, [action])
 
     function handleFindNewFriend() {
         setDisplayFindNewFriend(!displayFindNewFriend)
@@ -83,7 +85,7 @@ function Friends() {
                         {
                             friends.length > 0 &&
                             friends.map((friend) => (
-                                <FriendCard key={friend._id} person={friend} isFriend={true}/>
+                                <FriendCard key={friend._id} person={friend}/>
                             ))
                         }
                     </div>
@@ -114,13 +116,14 @@ function Friends() {
                                             const requestRecieved = requests.find(req => (req.accepterId === profileId && req.requesterId === person._id));
                                             const isFriend = friends.find(friend => friend._id === person._id);
                                             return person._id !== profileId && isFriend === undefined && (
-                                                <FriendCard
+                                                <FriendRequestCard
                                                     key={person._id}
                                                     profileId={profileId}
                                                     person={person}
                                                     hasRequestSent={requestSent}
                                                     hasRequestRecieved={requestRecieved}
                                                     setDisplayFindNewFriend={setDisplayFindNewFriend}
+                                                    setAction={setAction}
                                                 />
                                             );
                                         })
