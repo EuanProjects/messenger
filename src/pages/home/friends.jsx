@@ -8,8 +8,11 @@ function Friends() {
     const [displayFindNewFriend, setDisplayFindNewFriend] = useState(false);
     const [newFriendSelected, setNewFriendSelected] = useState(false);
     const [allPeopleOnMessenger, setAllPeopleOnMessenger] = useState([]);
+    const [friends, setFriends] = useState([]);
+    const [requests, setRequests] = useState();
     const API_URL = import.meta.env.VITE_API_URL;
-    const {profileId} = useParams();
+    const { profileId } = useParams();
+
     useEffect(() => {
         async function getPeopleOnMessenger() {
             try {
@@ -21,42 +24,47 @@ function Friends() {
                 const data = await response.json();
                 setAllPeopleOnMessenger(data);
             } catch (error) {
-                console.error("Error trying to get data", error);
+                console.error("Error trying to get people", error);
+            }
+        }
+
+        async function getRequests() {
+            try {
+                const response = await fetch(`http://${API_URL}/request/profile/${profileId}`, {
+                    mode: 'cors',
+                    method: 'GET',
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    }
+                })
+                const data = await response.json();
+                setRequests(data);
+            } catch (error) {
+                console.error("Error trying to get requests")
+            }
+        }
+
+        async function getFriends() {
+            try {
+                const response = await fetch(`http://${API_URL}/profile/${profileId}/friends`, {
+                    mode: 'cors',
+                    method: 'GET'
+                })
+                const data = await response.json();
+                setFriends(data);
+                console.log(data);
+            } catch (error) {
+                console.error("Error trying to get friends: ", error);
             }
         }
 
         getPeopleOnMessenger();
-    }, [API_URL])
+        getRequests();
+        getFriends();
+    }, [])
 
     function handleFindNewFriend() {
         setDisplayFindNewFriend(!displayFindNewFriend)
-    }
-
-    function handleNewFriendSelected(friendId) {
-
-        console.log(profileId, friendId);
-        setNewFriendSelected(!newFriendSelected)
-    }
-
-    async function handleSendAddRequest() {
-        try {
-            const response = await fetch(`http://${API_URL}/request`, {
-                mode: 'cors',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(
-                    {
-                        
-                    }
-                )
-            });
-            const data = await response.json();
-            console.log(data);
-        } catch (error) {
-            console.error("Error sending request: ", error)
-        }
     }
 
     return (
@@ -72,10 +80,12 @@ function Friends() {
                 </div>
                 <div className="h-full w-full overflow-auto border-t-2 border-b-2 border-highlighted-grey">
                     <div>
-                        {/* <FriendCard />
-                        <FriendCard />
-                        <FriendCard />
-                        <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> <FriendCard /> */}
+                        {
+                            friends.length > 0 &&
+                            friends.map((friend) => (
+                                <FriendCard key={friend._id} person={friend} isFriend={true}/>
+                            ))
+                        }
                     </div>
                 </div>
                 <div className="chat-row3 h-14 w-full flex justify-between p-3">
@@ -99,20 +109,31 @@ function Friends() {
                             <div className="overflow-y-auto grid p-4">
                                 <div className="overflow-auto">
                                     {
-                                        allPeopleOnMessenger.map((person) => (
-                                            <FriendCard key={person._id} person={person} onClick={() => {handleNewFriendSelected(person._id)}} />
-                                        ))
+                                        allPeopleOnMessenger.map((person) => {
+                                            const requestSent = requests.find(req => req.accepterId === person._id);
+                                            const requestRecieved = requests.find(req => (req.accepterId === profileId && req.requesterId === person._id));
+                                            const isFriend = friends.find(friend => friend._id === person._id);
+                                            return person._id !== profileId && isFriend === undefined && (
+                                                <FriendCard
+                                                    key={person._id}
+                                                    profileId={profileId}
+                                                    person={person}
+                                                    hasRequestSent={requestSent}
+                                                    hasRequestRecieved={requestRecieved}
+                                                    setDisplayFindNewFriend={setDisplayFindNewFriend}
+                                                />
+                                            );
+                                        })
                                     }
-
                                 </div>
                             </div>
-                            <div className="grid grid-cols-2 gap-4 text-white p-3">
+                            <div className="grid gap-4 text-white p-3">
                                 <button className="bg-highlighted-grey rounded-lg" onClick={handleFindNewFriend}>
                                     Cancel
                                 </button>
-                                <button className="bg-highlighted-grey rounded-lg" onClick={handleSendAddRequest}>
+                                {/* <button className="bg-highlighted-grey rounded-lg" onClick={handleSendAddRequest}>
                                     Add
-                                </button>
+                                </button> */}
 
                             </div>
                         </div>
