@@ -22,6 +22,7 @@ function Messages() {
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState("");
     const [refresh, setRefresh] = useState(false);
+    const { profileId } = useParams();
 
     function handleShowSettings() {
         setShowSettings(!showSettings);
@@ -155,14 +156,14 @@ function Messages() {
                                     const isGrouped = nextMessage && nextMessage.profileId._id === message.profileId._id;
                                     return (
                                         <>
-                                            <div key={`${date}-${index}`} className={`w-full ${message.profileId._id === "6662212e411d37339fb2dd98" ? "message-group-sent" : "message-group-recieved"}`}>
-                                                <div className={`grid ${message.profileId._id === '6662212e411d37339fb2dd98' ? 'justify-self-end' : 'justify-self-start'}`}>
-                                                    <div className={`text-light-grey ${message.profileId._id === '6662212e411d37339fb2dd98' ? 'hidden' : 'justify-self-start'}`}>
+                                            <div key={`${date}-${index}`} className={`w-full ${message.profileId._id === profileId ? "message-group-sent" : "message-group-recieved"}`}>
+                                                <div className={`grid ${message.profileId._id === profileId ? 'justify-self-end' : 'justify-self-start'}`}>
+                                                    <div className={`text-light-grey ${message.profileId._id === profileId ? 'hidden' : 'justify-self-start'}`}>
                                                         {message.profileId.username}
                                                     </div>
                                                     <div
                                                         style={{
-                                                            backgroundColor: message.profileId._id === '6662212e411d37339fb2dd98' ? themes[currentTheme] : '#3c3c3c'
+                                                            backgroundColor: message.profileId._id === profileId ? themes[currentTheme] : '#3c3c3c'
                                                         }}
                                                         className={`rounded-lg min-w-[100px] max-w-full my-3 py-2 px-3  text-white`}
                                                     >
@@ -170,7 +171,7 @@ function Messages() {
                                                     </div>
                                                 </div>
                                                 {!isGrouped ? (
-                                                    <div className={`rounded-full bg-white h-9 w-9 self-end mb-3 ${message.profileId._id !== '6662212e411d37339fb2dd98' ? "recieved-message-profile ml-1" : "hidden"}`}></div>
+                                                    <div className={`rounded-full bg-white h-9 w-9 self-end mb-3 ${message.profileId._id !== profileId ? "recieved-message-profile ml-1" : "hidden"}`}></div>
                                                 ) :
                                                     (
                                                         <div className={`w-full h-full recieved-message-profile`}></div>

@@ -30,7 +30,7 @@ function Setup() {
             }
         )
         const data = await response.json();
-        navigate("/home", { state: { profileId } });
+        navigate(`/home/profile/${profileId}/chats`);
     } catch (error) {
         console.error("Error saving profile: ", error);
     }

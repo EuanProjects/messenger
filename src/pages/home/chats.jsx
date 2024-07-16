@@ -3,7 +3,7 @@ import './styles/chats.css'
 import ChatCard from "./ChatCard";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import FriendCard from "./friendcard";
+import FriendCard from "./friendRequestCard";
 
 /*
     useEffect(() => {
@@ -113,13 +113,13 @@ function Chats() {
                             </div>
                             <div className="overflow-y-auto grid p-4">
                                 <div className="overflow-auto">
+                                    {/* <FriendCard onClick={handleNewChatSelected} />
                                     <FriendCard onClick={handleNewChatSelected} />
                                     <FriendCard onClick={handleNewChatSelected} />
                                     <FriendCard onClick={handleNewChatSelected} />
                                     <FriendCard onClick={handleNewChatSelected} />
                                     <FriendCard onClick={handleNewChatSelected} />
-                                    <FriendCard onClick={handleNewChatSelected} />
-                                    <FriendCard onClick={handleNewChatSelected} />
+                                    <FriendCard onClick={handleNewChatSelected} /> */}
 
                                 </div>
                             </div>
