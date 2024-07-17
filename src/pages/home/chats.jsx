@@ -4,38 +4,16 @@ import ChatCard from "./ChatCard";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import FriendCard from "./friendRequestCard";
-
-/*
-    useEffect(() => {
-        async function checkUser() {
-            try {
-                const response = await fetch('http://localhost:3000/auth/user', {
-                    mode: 'cors',
-                    method: 'GET',
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-                });
-                if (!response.ok) {
-                    // please fix this later lol
-                    navigate("/login");
-                }
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-
-
-        checkUser()
-        fetchData();
-    }, [navigate])
-*/
+import FriendChatCard from "./friendChatCard";
 
 function Chats() {
     const API_URL = import.meta.env.VITE_API_URL
     const [displayNewChat, setDisplayNewChat] = useState(false);
     const [newChatSelected, setNewChatSelected] = useState(false);
+    const [selectedFriends, setSelectedFriends] = useState(new Set());
+    const [friends, setFriends] = useState([]);
     const url = useLocation().pathname;
-    const profileId = useParams()
-    console.log(profileId);
+    const {profileId} = useParams()
     const isNotDisplayingMessages = url === "/home/chats";
     const [chats, setChats] = useState([]);
     const navigate = useNavigate();
@@ -44,7 +22,7 @@ function Chats() {
         async function getChats() {
             const token = localStorage.getItem("token")
             try {
-                const response = await fetch(`http://${API_URL}/conversation/profile/6662212e411d37339fb2dd98`, {
+                const response = await fetch(`http://${API_URL}/conversation/profile/${profileId}`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
@@ -56,7 +34,6 @@ function Chats() {
                     navigate("/");
                 }
                 const data = await response.json();
-                console.log(data);
                 setChats(data);
 
             } catch (error) {
@@ -64,25 +41,73 @@ function Chats() {
             }
         }
 
+        async function getFriends() {
+            console.log("getting friends");
+            try {
+                const response = await fetch(`http://${API_URL}/profile/${profileId}/friends`, {
+                    mode: 'cors',
+                    method: 'GET'
+                })
+                const data = await response.json();
+                console.log(data);
+                setFriends(data);
+            } catch (error) {
+                console.error("Error trying to get friends: ", error);
+            }
+        }
+
         getChats();
+        getFriends();
     }, [API_URL, profileId])
 
     function handleDisplayNewChat() {
         setDisplayNewChat(!displayNewChat);
     }
 
-    function handleNewChatSelected() {
-        // setNewChatSelected(!newChatSelected);
+    function handleOnChange(id) {
+        const updatedSelectedFriends = new Set(selectedFriends);
+        if (selectedFriends.has(id)) {
+            updatedSelectedFriends.delete(id);
+            console.log(updatedSelectedFriends);
+            setSelectedFriends(updatedSelectedFriends);
+        } else {
+            updatedSelectedFriends.add(id)
+            console.log(updatedSelectedFriends);
+            setSelectedFriends(updatedSelectedFriends);
+        }
+    }
+
+    async function handleConfirmClick() {
+        const profileIds = Array.from(selectedFriends);
+        profileIds.push(profileId);
+        console.log("creating chat");
+        try {
+            const response = await fetch(`http://${API_URL}/conversation`, {
+                mode: 'cors',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    profileIds: profileIds
+                })
+            })
+        } catch (error) {
+            console.error("Error setting up chat: ", error)
+        }
+        setSelectedFriends(new Set());
+        setDisplayNewChat(!displayNewChat);
     }
 
     return (
         <>
-            <div className={`order-1 ${isNotDisplayingMessages ? "chats-grid md:order-2" : " md:chats-grid md:order-2"} w-[calc(100vw-32px)] md:w-1/6 md:min-w-80 h-[calc(100vh-100px)] md:h-full bg-grey rounded-xl shadow-lg`} onClick={handleDisplayNewChat}>
+            <div className={`order-1 ${isNotDisplayingMessages ? "chats-grid md:order-2" : " md:chats-grid md:order-2"} w-[calc(100vw-32px)] md:w-1/6 md:min-w-80 h-[calc(100vh-100px)] md:h-full bg-grey rounded-xl shadow-lg`}>
                 <div className="chat-row1 w-full flex justify-between p-3">
                     <h2 className="text-2xl font-bold text-light-grey">
                         Chats
                     </h2>
-                    <button className="h-9 w-9 rounded-full bg-highlighted-grey flex items-center justify-center shadow-sm">
+                    <button className="h-9 w-9 rounded-full bg-highlighted-grey flex items-center justify-center shadow-sm"
+                        onClick={handleDisplayNewChat}>
                         <PlusSquare size={20} className="stroke-light-grey" />
                     </button>
                 </div>
@@ -90,7 +115,7 @@ function Chats() {
                     {
                         chats.map(chat => (
                             <>
-                                <ChatCard chat={chat}/>
+                                <ChatCard chat={chat} />
                             </>
                         ))
                     }
@@ -113,21 +138,21 @@ function Chats() {
                             </div>
                             <div className="overflow-y-auto grid p-4">
                                 <div className="overflow-auto">
-                                    {/* <FriendCard onClick={handleNewChatSelected} />
-                                    <FriendCard onClick={handleNewChatSelected} />
-                                    <FriendCard onClick={handleNewChatSelected} />
-                                    <FriendCard onClick={handleNewChatSelected} />
-                                    <FriendCard onClick={handleNewChatSelected} />
-                                    <FriendCard onClick={handleNewChatSelected} />
-                                    <FriendCard onClick={handleNewChatSelected} /> */}
-
+                                    {
+                                        friends.map(friend => {
+                                            const isChecked = selectedFriends.has(friend._id);
+                                            return (
+                                                <FriendChatCard friend={friend} isChecked={isChecked} handleOnChange={handleOnChange}/>
+                                            )
+                                        })
+                                    }
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4 text-white p-3">
                                 <button className="bg-highlighted-grey rounded-lg" onClick={handleDisplayNewChat}>
                                     Cancel
                                 </button>
-                                <button className="bg-highlighted-grey rounded-lg" onClick={handleDisplayNewChat}>
+                                <button className="bg-highlighted-grey rounded-lg" onClick={() => {handleConfirmClick()}}>
                                     Confirm
                                 </button>
 

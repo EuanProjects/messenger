@@ -115,7 +115,6 @@ function Messages() {
     }, {});
 
 
-
     return (
         <>
             <div className={`order-1 md:order-3 ${showSettings ? 'hidden md:messages-grid md:w-4/6' : 'messages-grid w-full md:w-5/6'} h-[calc(100vh-92px)] md:h-full bg-grey rounded-xl shadow-lg`}>
