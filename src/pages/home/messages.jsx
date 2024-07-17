@@ -42,7 +42,7 @@ function Messages() {
                 },
                 body: JSON.stringify({
                     message: messageInput,
-                    profileId: "6662212e411d37339fb2dd98"
+                    profileId: profileId
                 })
             });
 

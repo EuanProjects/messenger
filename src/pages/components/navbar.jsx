@@ -1,9 +1,16 @@
-import { MessageCircle, Users } from "react-feather";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { LogOut, MessageCircle, Settings, Users } from "react-feather";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 function Navbar() {
     const path = useLocation().pathname;
     const { chatId, profileId } = useParams();
+    const navigate = useNavigate();
+
+    function handleLogOut() {
+        localStorage.removeItem("token");
+        alert("You have been logged out!");
+        navigate("/");
+    }
 
     return (
         <>
@@ -22,8 +29,16 @@ function Navbar() {
                         <Users className="fill-light-grey stroke-light-grey group-focus:fill-white group-focus:stroke-white" />
                     </Link>
                 </div>
-                <div>
-                    <div className="rounded-full h-12 w-12 md:h-16 md:w-16 bg-white"></div>
+                <div className="relative">
+                    <button>
+                        <div className="rounded-full h-12 w-12 md:h-16 md:w-16 bg-white"></div>
+                    </button>
+                    <div className="absolute top-0 -translate-y-48 -translate-x-full md:translate-x-1/4 w-48 h-48 rounded-lg p-2 bg-light-grey">
+                        <button className="flex gap-2 items-center h-10"
+                            ><div className="rounded-full h-8 w-8 bg-white grid place-items-center"><Settings /></div><span className="text-white">Settings</span></button>
+                        <button className="flex gap-2 items-center h-10"
+                            onClick={() => { handleLogOut() }}><div className="rounded-full h-8 w-8 bg-white grid place-items-center"><LogOut size={18} /></div><span className="text-white">Log Out</span></button>
+                    </div>
                 </div>
             </div>
         </>
