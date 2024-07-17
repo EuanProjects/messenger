@@ -1,0 +1,5 @@
+.chat-card-container {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    grid-template-rows: 48px 1fr;
+}
