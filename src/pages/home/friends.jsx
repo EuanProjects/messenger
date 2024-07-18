@@ -96,9 +96,9 @@ function Friends() {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: {
+                    body: JSON.stringify({
                         profileIds: [friendId, profileId]
-                    }
+                    })
                 })
                 if (response.ok) {
                     const data = await response.json();
