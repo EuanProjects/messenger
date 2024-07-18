@@ -13,7 +13,7 @@ function Chats() {
     const [selectedFriends, setSelectedFriends] = useState(new Set());
     const [friends, setFriends] = useState([]);
     const url = useLocation().pathname;
-    const {profileId} = useParams()
+    const { profileId } = useParams()
     const isNotDisplayingMessages = url === "/home/chats";
     const [chats, setChats] = useState([]);
     const navigate = useNavigate();
@@ -81,9 +81,8 @@ function Chats() {
     async function handleConfirmClick() {
         const profileIds = Array.from(selectedFriends);
         profileIds.push(profileId);
-        console.log("creating chat");
         try {
-            const response = await fetch(`http://${API_URL}/conversation`, {
+            const chatExistsResponse = await fetch(`http://${API_URL}/conversation/profile`, {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
@@ -93,6 +92,23 @@ function Chats() {
                     profileIds: profileIds
                 })
             })
+
+            const chat = await chatExistsResponse.json();
+            if (!chat) {
+                const createChatResponse = await fetch(`http://${API_URL}/conversation`, {
+                    mode: 'cors',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        profileIds: profileIds
+                    })
+                })
+            } else {
+                navigate(`/home/profile/${profileId}/chats/${chat._id}`);
+            }
+
         } catch (error) {
             console.error("Error setting up chat: ", error)
         }
@@ -143,7 +159,7 @@ function Chats() {
                                         friends.map(friend => {
                                             const isChecked = selectedFriends.has(friend._id);
                                             return (
-                                                <FriendChatCard friend={friend} isChecked={isChecked} handleOnChange={handleOnChange}/>
+                                                <FriendChatCard friend={friend} isChecked={isChecked} handleOnChange={handleOnChange} />
                                             )
                                         })
                                     }
@@ -153,7 +169,7 @@ function Chats() {
                                 <button className="bg-highlighted-grey rounded-lg" onClick={handleDisplayNewChat}>
                                     Cancel
                                 </button>
-                                <button className="bg-highlighted-grey rounded-lg" onClick={() => {handleConfirmClick()}}>
+                                <button className="bg-highlighted-grey rounded-lg" onClick={() => { handleConfirmClick() }}>
                                     Confirm
                                 </button>
 
