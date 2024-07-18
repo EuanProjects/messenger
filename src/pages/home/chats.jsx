@@ -34,6 +34,7 @@ function Chats() {
                     navigate("/");
                 }
                 const data = await response.json();
+                console.log(chats);
                 setChats(data);
 
             } catch (error) {

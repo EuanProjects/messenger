@@ -1,9 +1,9 @@
 import { PlusSquare } from "react-feather"
 import "./styles/chats.css"
 import FriendRequestCard from "./friendRequestCard"
-import FriendCard from "./friendCard"
+import FriendCard from "./friendCard";
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function Friends() {
     const [displayFindNewFriend, setDisplayFindNewFriend] = useState(false);
@@ -14,6 +14,7 @@ function Friends() {
     const [action, setAction] = useState(false);
     const API_URL = import.meta.env.VITE_API_URL;
     const { profileId } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function getPeopleOnMessenger() {
@@ -36,7 +37,7 @@ function Friends() {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
-                        'Content-Type' : 'application/json'
+                        'Content-Type': 'application/json'
                     }
                 })
                 const data = await response.json();
@@ -69,6 +70,48 @@ function Friends() {
         setDisplayFindNewFriend(!displayFindNewFriend)
     }
 
+
+    async function handleFriendCardClick(friendId) {
+        try {
+            const response = await fetch(`http://${API_URL}/conversation/profile`, {
+                mode: 'cors',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    profileIds: [
+                        friendId, profileId
+                    ]
+                })
+            })
+            const data = await response.json();
+            console.log(data);
+            if (data && data.profileIds && data.profileIds.length > 0) {
+                navigate(`/home/profile/${profileId}/chats/${data._id}`);
+            } else {
+                const response = await fetch(`http://${API_URL}/conversation`, {
+                    mode: 'cors',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        profileIds: [friendId, profileId]
+                    })
+                })
+                if (response.ok) {
+                    const data = await response.json();
+                    navigate(`/home/profile/${profileId}/chats/${data._id}`);
+                } else {
+                    alert("Error creating chat. Try again later.");
+                }
+            }
+        } catch (error) {
+            console.error("Error gathering conversation", error);
+        }
+    }
+
     return (
         <>
             <div className="chats-grid md:order-2 w-[calc(100vw-32px)] md:w-1/6 md:min-w-80 h-[calc(100vh-100px)] md:h-full bg-grey rounded-xl shadow-lg">
@@ -85,7 +128,11 @@ function Friends() {
                         {
                             friends.length > 0 &&
                             friends.map((friend) => (
-                                <FriendCard key={friend._id} person={friend}/>
+                                <FriendCard
+                                    key={friend._id}
+                                    person={friend}
+                                    handleFriendCardClick={handleFriendCardClick}
+                                />
                             ))
                         }
                     </div>
