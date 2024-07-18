@@ -4,16 +4,19 @@ import "./styles/chatCard.css"
 function ChatCard({ chat }) {
     let displayDate = "";
     let lastName = "";
+    const givenDate = new Date(chat.lastUpdated);
+
+
+
+    const today = new Date();
+    const differenceInMs = givenDate.getTime() - today.getTime();
+    const daysAway = Math.abs(Math.round(differenceInMs / (1000 * 60 * 60 * 24)));
+    if (daysAway === 0) {
+        displayDate = "Today"
+    } else {
+        displayDate = `${daysAway}d.`
+    }
     if (chat.lastMessage) {
-        const givenDate = new Date(chat.lastUpdated);
-        const today = new Date();
-        const differenceInMs = givenDate.getTime() - today.getTime();
-        const daysAway = Math.round(differenceInMs / (1000 * 60 * 60 * 24));
-        if (daysAway === 0) {
-            displayDate = "Today"
-        } else {
-            displayDate = `${daysAway}d.`
-        }
         lastName = chat.profileIds?.find((profile) => profile._id === chat.lastMessage.profileId)?.username;
     }
 
@@ -31,7 +34,10 @@ function ChatCard({ chat }) {
                     </h3>
                     <div className="flex text-sm">
                         <span className="block truncate overflow-hidden text-gray-200">{chat.lastMessage ? `${lastName}: ${chat.lastMessage.message}` : ""}</span>
-                        <span>.</span>
+                        {
+                            lastName !== "" &&
+                            <span>.</span>
+                        }
                         <span>{displayDate}</span>
                     </div>
 

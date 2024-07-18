@@ -70,25 +70,46 @@ function Friends() {
         setDisplayFindNewFriend(!displayFindNewFriend)
     }
 
+
     async function handleFriendCardClick(friendId) {
-        console.log(`Clicked on this friend ${friendId}`)
         try {
-            const response = await fetch(`http://${API_URL}/conversation/profile/${profileId}/profile/${friendId}`, {
+            const response = await fetch(`http://${API_URL}/conversation/profile`, {
                 mode: 'cors',
-                method: 'GET'
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    profileIds: [
+                        friendId, profileId
+                    ]
+                })
             })
             const data = await response.json();
-            if (data) {
+            console.log(data);
+            if (data && data.profileIds && data.profileIds.length > 0) {
                 navigate(`/home/profile/${profileId}/chats/${data._id}`);
             } else {
-                console.log("Creating chat");
+                const response = await fetch(`http://${API_URL}/conversation`, {
+                    mode: 'cors',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: {
+                        profileIds: [friendId, profileId]
+                    }
+                })
+                if (response.ok) {
+                    const data = await response.json();
+                    navigate(`/home/profile/${profileId}/chats/${data._id}`);
+                } else {
+                    alert("Error creating chat. Try again later.");
+                }
             }
         } catch (error) {
             console.error("Error gathering conversation", error);
         }
-        /*
-            find if we have a chat
-        */
     }
 
     return (
