@@ -59,7 +59,7 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                     <button className="bg-highlighted-grey rounded-full h-6 w-6 text-white m-3"
                         onClick={handleShowSettings}>
                         <ChevronLeft style={{
-                            stroke: themes[selectedTheme],
+                            stroke: `${themes[selectedTheme]}`,
                         }} />
                     </button>
                 </div>
@@ -100,18 +100,18 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                     {
                         showParticipants &&
                         <>
-                            {/* {
+                            {
                                 participants.map(particpant => (
                                     <>
-                                        <button className="h-12 w-full px-3 flex gap-2 hover:bg-highlighted-grey place-items-center rounded-lg"
+                                        <div className="h-12 w-full px-3 flex gap-2 hover:bg-highlighted-grey place-items-center rounded-lg"
                                             onClick={handleShowThemesClick}>
                                             <div>
-                                                {particpant.username}
+                                                {particpant.name}
                                             </div>
-                                        </button>
+                                        </div>
                                     </>
                                 ))
-                            } */}
+                            }
                         </>
                     }
                 </div>

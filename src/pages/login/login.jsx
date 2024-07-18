@@ -30,14 +30,10 @@ function Login() {
                 setMessage(data.message);
             } else {
                 localStorage.setItem('token', data.token);
-                console.log(data);
-                console.log("here");
                 if (data.setup) {
                     navigate(`/home/profile/${data.profileId}/chats`);
                 } else {
-                    // go to setup page
                     navigate(`/profile/${data.profileId}/setup`);
-                    console.log("Going to setup page");
                 }
             }
 

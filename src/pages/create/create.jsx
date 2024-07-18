@@ -26,7 +26,6 @@ function Create() {
             })
             const data = await response;
             if (data.ok) {
-                console.log(data);
                 alert("Profile created! Log in with your new account");
                 navigate("/");
             } else {
@@ -39,7 +38,6 @@ function Create() {
             alert("Profile ")
             console.error("Error creating acccount: ", error);
         }
-        console.log(username, password, confirmPassword);
     }
     return (
         <div className="w-screen h-screen flex flex-col justify-center place-items-center">

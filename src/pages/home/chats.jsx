@@ -34,7 +34,6 @@ function Chats() {
                     navigate("/");
                 }
                 const data = await response.json();
-                console.log(chats);
                 setChats(data);
 
             } catch (error) {
@@ -43,14 +42,12 @@ function Chats() {
         }
 
         async function getFriends() {
-            console.log("getting friends");
             try {
                 const response = await fetch(`http://${API_URL}/profile/${profileId}/friends`, {
                     mode: 'cors',
                     method: 'GET'
                 })
                 const data = await response.json();
-                console.log(data);
                 setFriends(data);
             } catch (error) {
                 console.error("Error trying to get friends: ", error);
@@ -69,11 +66,9 @@ function Chats() {
         const updatedSelectedFriends = new Set(selectedFriends);
         if (selectedFriends.has(id)) {
             updatedSelectedFriends.delete(id);
-            console.log(updatedSelectedFriends);
             setSelectedFriends(updatedSelectedFriends);
         } else {
             updatedSelectedFriends.add(id)
-            console.log(updatedSelectedFriends);
             setSelectedFriends(updatedSelectedFriends);
         }
     }
@@ -132,7 +127,7 @@ function Chats() {
                     {
                         chats.map(chat => (
                             <>
-                                <ChatCard chat={chat} />
+                                <ChatCard chat={chat} profileId={profileId}/>
                             </>
                         ))
                     }

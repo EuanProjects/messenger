@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom";
 
 function ChatDetail() {
-    const { chatId } = useParams(); // Destructure chatId from params
-    console.log(chatId); // Log chatId for debugging
+    const { chatId } = useParams();
     return (
         <>
             <div className="hidden order-3 md:grid bg-grey w-full h-full rounded-lg place-items-center shadow-lg">

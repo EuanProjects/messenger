@@ -45,7 +45,6 @@ function Navbar() {
     }
 
     function handleDisplaySettings() {
-        console.log("here");
         setDisplaySettings(!displaySettings)
         handleProfileClick();
     }
@@ -65,7 +64,6 @@ function Navbar() {
             })
 
             const profileChanged = await profileChangeResponse.json();
-            console.log(profileChanged);
             alert("Settings changed!");
             setName(profileChanged.name);
             setUsername(profileChanged.username);
