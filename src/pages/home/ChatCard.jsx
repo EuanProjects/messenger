@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import "./styles/chatCard.css"
 
-function ChatCard({ chat }) {
+function ChatCard({ chat, profileId }) {
     let displayDate = "";
     let lastName = "";
     const givenDate = new Date(chat.lastUpdated);
-
-
 
     const today = new Date();
     const differenceInMs = givenDate.getTime() - today.getTime();
@@ -17,10 +15,12 @@ function ChatCard({ chat }) {
         displayDate = `${daysAway}d.`
     }
     if (chat.lastMessage) {
-        lastName = chat.profileIds?.find((profile) => profile._id === chat.lastMessage.profileId)?.username;
+        lastName = chat.profileIds?.find((profile) => profile._id === chat.lastMessage.profileId)?.name;
     }
 
-    const formattedNames = chat.profileIds.map(profile => profile.username).join(', ');
+    const formattedNames = chat.profileIds.filter(profile => profile._id !== profileId)
+        .map(profile => profile.name)
+        .join(', ');
 
     return (
         <>

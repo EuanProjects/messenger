@@ -48,7 +48,6 @@ function Messages() {
             });
 
             const data = await response.json();
-            console.log(data);
             setMessageInput("");
             setRefresh(!refresh);
         } catch (error) {
@@ -71,14 +70,13 @@ function Messages() {
                 const data = await response.json();
                 setCurrentTheme(data.theme);
                 setParticipants(data.profileIds);
-                setFormattedNames(data.profileIds.map(profile => profile.username).join(', '))
+                setFormattedNames(data.profileIds.filter(profile => profile._id !== profileId).map(profile => profile.name).join(', '))
             } catch (error) {
                 console.error("Error fetching data: ", error)
             }
         }
 
         async function getMessages() {
-            console.log("getting messages")
             try {
                 const response = await fetch(`http://${API_URL}/message/${chatId}`, {
                     mode: 'cors',
@@ -151,7 +149,7 @@ function Messages() {
                                             <div key={`${date}-${index}`} className={`w-full ${message.profileId._id === profileId ? "message-group-sent" : "message-group-recieved"}`}>
                                                 <div className={`grid ${message.profileId._id === profileId ? 'justify-self-end' : 'justify-self-start'}`}>
                                                     <div className={`text-light-grey ${message.profileId._id === profileId ? 'hidden' : 'justify-self-start'}`}>
-                                                        {message.profileId.username}
+                                                        {message.profileId.name}
                                                     </div>
                                                     <div
                                                         style={{

@@ -48,7 +48,6 @@ function Friends() {
         }
 
         async function getFriends() {
-            console.log("getting friends");
             try {
                 const response = await fetch(`http://${API_URL}/profile/${profileId}/friends`, {
                     mode: 'cors',
@@ -86,7 +85,6 @@ function Friends() {
                 })
             })
             const data = await response.json();
-            console.log(data);
             if (data && data.profileIds && data.profileIds.length > 0) {
                 navigate(`/home/profile/${profileId}/chats/${data._id}`);
             } else {
