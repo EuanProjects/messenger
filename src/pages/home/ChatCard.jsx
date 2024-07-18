@@ -20,17 +20,15 @@ function ChatCard({ chat }) {
         lastName = chat.profileIds?.find((profile) => profile._id === chat.lastMessage.profileId)?.username;
     }
 
+    const formattedNames = chat.profileIds.map(profile => profile.username).join(', ');
+
     return (
         <>
             <Link to={chat._id} className="h-15 w-full chat-card-container p-2 focus:bg-highlighted-grey hover:bg-highlighted-grey rounded-md">
                 <div className="h-12 w-12 bg-white rounded-full"></div>
                 <div className="flex flex-col justify-center ml-2 text-light-grey">
                     <h3 className="text-left">
-                        {
-                            chat.profileIds.map(profile => (
-                                <span key={profile._id}>{`${profile.username}, `}</span>
-                            ))
-                        }
+                        {formattedNames}
                     </h3>
                     <div className="flex text-sm">
                         <span className="block truncate overflow-hidden text-gray-200">{chat.lastMessage ? `${lastName}: ${chat.lastMessage.message}` : ""}</span>

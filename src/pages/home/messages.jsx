@@ -22,6 +22,7 @@ function Messages() {
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState("");
     const [refresh, setRefresh] = useState(false);
+    const [formattedNames, setFormattedNames] = useState("");
     const { profileId } = useParams();
 
     function handleShowSettings() {
@@ -70,8 +71,7 @@ function Messages() {
                 const data = await response.json();
                 setCurrentTheme(data.theme);
                 setParticipants(data.profileIds);
-
-
+                setFormattedNames(data.profileIds.map(profile => profile.username).join(', '))
             } catch (error) {
                 console.error("Error fetching data: ", error)
             }
@@ -112,7 +112,6 @@ function Messages() {
         return acc;
     }, {});
 
-    console.log(participants);
     return (
         <>
             <div className={`order-1 md:order-3 ${showSettings ? 'hidden md:messages-grid md:w-4/6' : 'messages-grid w-full md:w-5/6'} h-[calc(100vh-92px)] md:h-full bg-grey rounded-xl shadow-lg`}>
@@ -123,11 +122,7 @@ function Messages() {
                         </div>
                         <div className="ml-1 text-light-grey">
                             <span className="text-left block font-bold">
-                                {
-                                    participants.map(profile => (
-                                        <span key={profile._id}>{`${profile.username}, `}</span>
-                                    ))
-                                }
+                                {formattedNames}
                             </span>
                             <span className="block">Online</span>
                         </div>
@@ -182,7 +177,7 @@ function Messages() {
                             </div>
                         </div>
                     ))}
-                    <div className="bg-white w-full h-2 pb-2" ref={paragraphRef} />
+                    <div className="w-full h-2 pb-2" ref={paragraphRef} />
                 </div>
                 <div className="flex justify-between p-3">
                     <div className="p-[6px] h-10 w-10">
