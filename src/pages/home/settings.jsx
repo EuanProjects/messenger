@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Check, ChevronLeft, ChevronRight, X } from "react-feather";
 import "./styles/settings.css";
+import { useNavigate } from "react-router-dom";
 
 function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, chatId, API_URL, participants }) {
     const [showChatSettings, setShowChatSettings] = useState(false);
@@ -8,6 +9,7 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
     const [showChangeThemes, setShowChangeThemes] = useState(false);
     const [newThemeSelected, setNewThemeSelected] = useState(true);
     const [selectedTheme, setSelectedTheme] = useState(currentTheme);
+    const navigate = useNavigate();
 
     function handleShowChatSettingsClick() {
         setShowChatSettings(!showChatSettings);
@@ -43,6 +45,11 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                 })
 
             });
+
+            if (!response.ok) {
+                navigate("/");
+            }
+
             const data = await response.json();
 
         } catch (error) {
