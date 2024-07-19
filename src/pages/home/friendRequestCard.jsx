@@ -1,12 +1,18 @@
+import { useNavigate } from "react-router-dom";
+
 function FriendRequestCard({ person, profileId, hasRequestSent, hasRequestRecieved, setDisplayFindNewFriend, setAction }) {
     const API_URL = import.meta.env.VITE_API_URL;
+    const token = localStorage.getItem("token");
+    const navigate = useNavigate();
+
     async function handleSendAddRequest(friendId) {
         try {
             const response = await fetch(`http://${API_URL}/request`, {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(
                     {
@@ -15,6 +21,10 @@ function FriendRequestCard({ person, profileId, hasRequestSent, hasRequestReciev
                     }
                 )
             });
+
+            if (!response.ok) {
+                navigate("/");
+            }
             const data = await response.json();
             setDisplayFindNewFriend(false);
             setAction(true);
@@ -30,7 +40,8 @@ function FriendRequestCard({ person, profileId, hasRequestSent, hasRequestReciev
                 mode: 'cors',
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify(
                     {
@@ -39,6 +50,10 @@ function FriendRequestCard({ person, profileId, hasRequestSent, hasRequestReciev
                     }
                 )
             });
+
+            if (!response.ok) {
+                navigate("/");
+            }
             const data = await response.json();
             setDisplayFindNewFriend(false);
             setAction(true);
@@ -54,9 +69,15 @@ function FriendRequestCard({ person, profileId, hasRequestSent, hasRequestReciev
                 mode: 'cors',
                 method: 'DELETE',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 }
             });
+
+            if (!response.ok) {
+                navigate("/");
+            }
+            
             const data = await response.json();
             setDisplayFindNewFriend(false);
             setAction(true);
@@ -79,7 +100,7 @@ function FriendRequestCard({ person, profileId, hasRequestSent, hasRequestReciev
                     <div className="group">
                         <div className="text-red-500 group-hover:hidden">Pending</div>
                         <button className="hidden group-hover:block group-hover:bg-dark-grey hover:text-red-500 text-white px-2 rounded-lg"
-                            onClick={() => {handleRejectRequest()}}>Reject</button>
+                            onClick={() => { handleRejectRequest() }}>Reject</button>
                     </div>
                 }
                 {

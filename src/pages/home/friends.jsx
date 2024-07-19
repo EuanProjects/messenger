@@ -15,6 +15,7 @@ function Friends() {
     const API_URL = import.meta.env.VITE_API_URL;
     const { profileId } = useParams();
     const navigate = useNavigate();
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         async function getPeopleOnMessenger() {
@@ -22,7 +23,14 @@ function Friends() {
                 const response = await fetch(`http://${API_URL}/profile`, {
                     mode: 'cors',
                     method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
                 })
+
+                if (!response.ok) {
+                    navigate("/");
+                }
 
                 const data = await response.json();
                 setAllPeopleOnMessenger(data);
@@ -37,9 +45,15 @@ function Friends() {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
                     }
                 })
+
+                if (!response.ok) {
+                    navigate("/");
+                }
+
                 const data = await response.json();
                 setRequests(data);
             } catch (error) {
@@ -51,8 +65,16 @@ function Friends() {
             try {
                 const response = await fetch(`http://${API_URL}/profile/${profileId}/friends`, {
                     mode: 'cors',
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
                 })
+
+                if (!response.ok) {
+                    navigate("/");
+                }
+
                 const data = await response.json();
                 setFriends(data);
             } catch (error) {
@@ -76,7 +98,8 @@ function Friends() {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     profileIds: [
@@ -84,6 +107,11 @@ function Friends() {
                     ]
                 })
             })
+
+            if (!response.ok) {
+                navigate("/");
+            }
+
             const data = await response.json();
             if (data && data.profileIds && data.profileIds.length > 0) {
                 navigate(`/home/profile/${profileId}/chats/${data._id}`);
@@ -93,6 +121,7 @@ function Friends() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
                     },
                     body: JSON.stringify({
                         profileIds: [friendId, profileId]
@@ -179,10 +208,6 @@ function Friends() {
                                 <button className="bg-highlighted-grey rounded-lg" onClick={handleFindNewFriend}>
                                     Cancel
                                 </button>
-                                {/* <button className="bg-highlighted-grey rounded-lg" onClick={handleSendAddRequest}>
-                                    Add
-                                </button> */}
-
                             </div>
                         </div>
                     </div>

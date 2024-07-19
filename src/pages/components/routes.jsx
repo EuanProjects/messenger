@@ -8,6 +8,8 @@ import Login from "../login/login";
 import ErrorPage from "./errorpage";
 import Messages from "../home/messages"
 import Setup from "../setup/setup";
+import { Navigate } from 'react-router-dom';
+
 
 
 const routes = [
@@ -38,8 +40,10 @@ const routes = [
         { path: "profile/:profileId/friends", element: <Friends />}
       ]
     },
-    
-
+    {
+      path: "*",
+      element: <Navigate to="/" replace />
+    }
   ];
   
   export default routes;

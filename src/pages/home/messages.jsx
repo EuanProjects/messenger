@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { MoreHorizontal, Image, Send } from "react-feather";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./styles/messages.css";
 import Settings from "./settings";
 
@@ -24,6 +24,8 @@ function Messages() {
     const [refresh, setRefresh] = useState(false);
     const [formattedNames, setFormattedNames] = useState("");
     const { profileId } = useParams();
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
 
     function handleShowSettings() {
         setShowSettings(!showSettings);
@@ -40,12 +42,18 @@ function Messages() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     message: messageInput,
                     profileId: profileId
                 })
             });
+
+
+            if (!response.ok) {
+                navigate("/");
+            }
 
             const data = await response.json();
             setMessageInput("");
@@ -67,6 +75,11 @@ function Messages() {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
+
+                if (!response.ok) {
+                    navigate("/");
+                }
+
                 const data = await response.json();
                 setCurrentTheme(data.theme);
                 setParticipants(data.profileIds);
@@ -83,8 +96,14 @@ function Messages() {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                 });
+
+                if (!response.ok) {
+                    navigate("/");
+                }
+                
                 const data = await response.json();
                 setMessages(data);
                 paragraphRef.current.scrollIntoView({

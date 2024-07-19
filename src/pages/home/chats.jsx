@@ -17,10 +17,11 @@ function Chats() {
     const isNotDisplayingMessages = url === "/home/chats";
     const [chats, setChats] = useState([]);
     const navigate = useNavigate();
+    const token = localStorage.getItem("token")
+
 
     useEffect(() => {
         async function getChats() {
-            const token = localStorage.getItem("token")
             try {
                 const response = await fetch(`http://${API_URL}/conversation/profile/${profileId}`, {
                     mode: 'cors',
@@ -45,8 +46,14 @@ function Chats() {
             try {
                 const response = await fetch(`http://${API_URL}/profile/${profileId}/friends`, {
                     mode: 'cors',
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
                 })
+                if (!response.ok) {
+                    navigate("/");
+                }
                 const data = await response.json();
                 setFriends(data);
             } catch (error) {
@@ -82,11 +89,16 @@ function Chats() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     profileIds: profileIds
                 })
             })
+
+            if (!chatExistsResponse.ok) {
+                navigate("/");
+            }
 
             const chat = await chatExistsResponse.json();
             if (!chat) {
@@ -95,11 +107,16 @@ function Chats() {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
                     },
                     body: JSON.stringify({
                         profileIds: profileIds
                     })
                 })
+
+                if (!createChatResponse.ok) {
+                    navigate("/");
+                }
             } else {
                 navigate(`/home/profile/${profileId}/chats/${chat._id}`);
             }
@@ -127,7 +144,7 @@ function Chats() {
                     {
                         chats.map(chat => (
                             <>
-                                <ChatCard chat={chat} profileId={profileId}/>
+                                <ChatCard chat={chat} profileId={profileId} />
                             </>
                         ))
                     }

@@ -2,39 +2,41 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useState } from "react";
 
 function Setup() {
-    /*
-        getId from the url
-            update the profile with name
-    */
-   const API_URL = import.meta.env.VITE_API_URL
-   const { profileId } = useParams();
-   const [name, setName] = useState("");
-   const navigate = useNavigate();
+    const API_URL = import.meta.env.VITE_API_URL
+    const { profileId } = useParams();
+    const [name, setName] = useState("");
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
 
 
-   async function handleSaveProfile(e) {
-    e.preventDefault()
-    const update = {
-        name,
-        setup: true
-    }
-    try {
-        const response = await fetch(`http://${API_URL}/profile/${profileId}`,
-            {
-                mode: 'cors',
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(update)
+    async function handleSaveProfile(e) {
+        e.preventDefault()
+        const update = {
+            name,
+            setup: true
+        }
+        try {
+            const response = await fetch(`http://${API_URL}/profile/${profileId}`,
+                {
+                    mode: 'cors',
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(update)
+                }
+            )
+            if (!response.ok) {
+                navigate("/");
             }
-        )
-        const data = await response.json();
-        navigate(`/home/profile/${profileId}/chats`);
-    } catch (error) {
-        console.error("Error saving profile: ", error);
+            
+            const data = await response.json();
+            navigate(`/home/profile/${profileId}/chats`);
+        } catch (error) {
+            console.error("Error saving profile: ", error);
+        }
     }
-   }
 
 
     return (

@@ -12,6 +12,7 @@ function Navbar() {
     const [displaySettings, setDisplaySettings] = useState(false);
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
+    const token = localStorage.getItem("token");
 
 
 
@@ -20,8 +21,14 @@ function Navbar() {
             try {
                 const profileResponse = await fetch(`http://${API_URL}/profile/${profileId}`, {
                     mode: 'cors',
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
                 })
+                if (!profileResponse.ok) {
+                    navigate("/");
+                }
 
                 const profile = await profileResponse.json();
                 setName(profile.name);
@@ -55,14 +62,17 @@ function Navbar() {
                 mode: 'cors',
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({
                     username: username,
                     name: name
                 })
             })
-
+            if (!profileChangeResponse.ok) {
+                navigate("/");
+            }
             const profileChanged = await profileChangeResponse.json();
             alert("Settings changed!");
             setName(profileChanged.name);
