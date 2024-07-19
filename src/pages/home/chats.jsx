@@ -130,7 +130,7 @@ function Chats() {
 
     return (
         <>
-            <div className={`order-1 ${isNotDisplayingMessages ? "chats-grid md:order-2" : " md:chats-grid md:order-2"} w-[calc(100vw-32px)] md:w-1/6 md:min-w-80 h-[calc(100vh-100px)] md:h-full bg-grey rounded-xl shadow-lg`}>
+            <div className={`order-1 ${isNotDisplayingMessages ? "chats-grid md:order-2" : " hidden md:chats-grid md:order-2"} w-[calc(100vw-32px)] md:w-1/6 md:min-w-80 h-[calc(100vh-100px)] md:h-full bg-grey rounded-xl shadow-lg`}>
                 <div className="chat-row1 w-full flex justify-between p-3">
                     <h2 className="text-2xl font-bold text-light-grey">
                         Chats
