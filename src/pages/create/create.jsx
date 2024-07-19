@@ -45,7 +45,7 @@ function Create() {
                 <h1 className="text-5xl text-deep-purple font-bold mb-2">Messenger</h1>
                 <MessageSquare className="stroke-deep-purple fill-deep-purple" size={48} />
             </div>
-            <form className="w-1/4 h-1/2 max-h-[350px] max-w-[318px] bg-grey rounded-lg shadow-lg p-4 flex flex-col place-items-center"
+            <form className="h-[390px] w-[318px] bg-grey rounded-lg shadow-lg p-4 flex flex-col place-items-center"
                 onSubmit={handleSubmit}>
                 <legend className="text-white text-center text-2xl mb-2 font-bold">Create Account</legend>
                 <p className="text-white grid mb-1">
