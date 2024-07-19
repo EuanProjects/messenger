@@ -20,7 +20,7 @@ function Friends() {
     useEffect(() => {
         async function getPeopleOnMessenger() {
             try {
-                const response = await fetch(`http://${API_URL}/profile`, {
+                const response = await fetch(`http://${API_URL}/profiles`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
@@ -138,6 +138,8 @@ function Friends() {
             console.error("Error gathering conversation", error);
         }
     }
+
+    console.log(allPeopleOnMessenger)
 
     return (
         <>
