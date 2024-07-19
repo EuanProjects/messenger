@@ -13,12 +13,11 @@ function Chats() {
     const [selectedFriends, setSelectedFriends] = useState(new Set());
     const [friends, setFriends] = useState([]);
     const url = useLocation().pathname;
-    const { profileId } = useParams()
+    const { profileId, chatId } = useParams()
     const isNotDisplayingMessages = url === "/home/chats";
     const [chats, setChats] = useState([]);
     const navigate = useNavigate();
     const token = localStorage.getItem("token")
-
 
     useEffect(() => {
         async function getChats() {
@@ -143,9 +142,7 @@ function Chats() {
                 <div className="h-full w-full overflow-auto border-t-2 border-b-2 border-highlighted-grey">
                     {
                         chats.map(chat => (
-                            <>
-                                <ChatCard chat={chat} profileId={profileId} />
-                            </>
+                            <ChatCard key={chat._id} chat={chat} profileId={profileId} chatId={chatId} />
                         ))
                     }
 

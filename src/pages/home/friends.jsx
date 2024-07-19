@@ -139,8 +139,6 @@ function Friends() {
         }
     }
 
-    console.log(allPeopleOnMessenger)
-
     return (
         <>
             <div className="chats-grid md:order-2 w-[calc(100vw-32px)] md:w-1/6 md:min-w-80 h-[calc(100vh-100px)] md:h-full bg-grey rounded-xl shadow-lg">
