@@ -103,7 +103,7 @@ function Messages() {
                 if (!response.ok) {
                     navigate("/");
                 }
-                
+
                 const data = await response.json();
                 setMessages(data);
                 paragraphRef.current.scrollIntoView({
@@ -163,32 +163,31 @@ function Messages() {
                                 {messages.map((message, index) => {
                                     const nextMessage = index < messages.length - 1 ? messages[index + 1] : null;
                                     const isGrouped = nextMessage && nextMessage.profileId._id === message.profileId._id;
-                                    return (
-                                        <>
-                                            <div key={`${date}-${index}`} className={`w-full ${message.profileId._id === profileId ? "message-group-sent" : "message-group-recieved"}`}>
-                                                <div className={`grid ${message.profileId._id === profileId ? 'justify-self-end' : 'justify-self-start'}`}>
-                                                    <div className={`text-light-grey ${message.profileId._id === profileId ? 'hidden' : 'justify-self-start'}`}>
-                                                        {message.profileId.name}
-                                                    </div>
-                                                    <div
-                                                        style={{
-                                                            backgroundColor: message.profileId._id === profileId ? themes[currentTheme] : '#3c3c3c'
-                                                        }}
-                                                        className={`rounded-lg min-w-[100px] max-w-full my-3 py-2 px-3  text-white`}
-                                                    >
-                                                        {message.message}
-                                                    </div>
-                                                </div>
-                                                {!isGrouped ? (
-                                                    <div className={`rounded-full bg-white h-9 w-9 self-end mb-3 ${message.profileId._id !== profileId ? "recieved-message-profile ml-1" : "hidden"}`}></div>
-                                                ) :
-                                                    (
-                                                        <div className={`w-full h-full recieved-message-profile`}></div>
-                                                    )
-                                                }
-                                            </div>
 
-                                        </>
+                                    return (
+                                        <div
+                                            key={`${date}-${index}`}
+                                            className={`w-full ${message.profileId._id === profileId ? "message-group-sent" : "message-group-recieved"}`}
+                                        >
+                                            <div className={`grid ${message.profileId._id === profileId ? 'justify-self-end' : 'justify-self-start'}`}>
+                                                <div className={`text-light-grey ${message.profileId._id === profileId ? 'hidden' : 'justify-self-start'}`}>
+                                                    {message.profileId.name}
+                                                </div>
+                                                <div
+                                                    style={{
+                                                        backgroundColor: message.profileId._id === profileId ? themes[currentTheme] : '#3c3c3c'
+                                                    }}
+                                                    className={`rounded-lg min-w-[100px] max-w-full my-3 py-2 px-3 text-white`}
+                                                >
+                                                    {message.message}
+                                                </div>
+                                            </div>
+                                            {!isGrouped ? (
+                                                <div className={`rounded-full bg-white h-9 w-9 self-end mb-3 ${message.profileId._id !== profileId ? "recieved-message-profile ml-1" : "hidden"}`}></div>
+                                            ) : (
+                                                <div className={`w-full h-full recieved-message-profile`}></div>
+                                            )}
+                                        </div>
                                     );
                                 })}
                             </div>
@@ -196,10 +195,11 @@ function Messages() {
                     ))}
                     <div className="w-full h-2 pb-2" ref={paragraphRef} />
                 </div>
+
                 <div className="flex justify-between p-3">
-                    <div className="p-[6px] h-10 w-10">
+                    {/* <div className="p-[6px] h-10 w-10">
                         <Image style={{ stroke: themes[currentTheme] }} />
-                    </div>
+                    </div> */}
                     <div className="grid place-items-center grow">
                         <input className="w-full rounded-full bg-highlighted-grey text-white px-4" type="text"
                             value={messageInput}

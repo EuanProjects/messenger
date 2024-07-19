@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "./styles/chatCard.css"
 
-function ChatCard({ chat, profileId }) {
+function ChatCard({ chat, profileId, chatId }) {
     let displayDate = "";
     let lastName = "";
     const givenDate = new Date(chat.lastUpdated);
@@ -24,7 +24,7 @@ function ChatCard({ chat, profileId }) {
 
     return (
         <>
-            <Link to={chat._id} className="h-15 w-full chat-card-container p-2 focus:bg-highlighted-grey hover:bg-highlighted-grey rounded-md">
+            <Link to={chat._id} className={`h-15 w-full chat-card-container p-2 focus:bg-highlighted-grey hover:bg-highlighted-grey rounded-md ${chatId === chat._id ? "bg-highlighted-grey" : ""}`}>
                 <div className="h-12 w-12 bg-white rounded-full"></div>
                 <div className="flex flex-col justify-center ml-2 text-light-grey">
                     <h3 className="text-left">
