@@ -61,7 +61,7 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
 
     return (
         <>
-            <div className="order-1 md:order-4 w-full md:grow min-w-[250px] h-full bg-grey rounded-xl shadow-inner flex flex-col">
+            <div className="order-1 md:order-4 min-w-[250px] w-full md:grow xl:w-1/6 h-full bg-grey rounded-xl shadow-inner flex flex-col">
                 <div className="flex justify-start p-2">
                     <button className="bg-highlighted-grey rounded-full h-6 w-6 text-white m-3"
                         onClick={handleShowSettings}>
