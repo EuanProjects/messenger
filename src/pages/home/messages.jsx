@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { MoreHorizontal, Image, Send } from "react-feather";
+import { MoreHorizontal, Image, Send, Users } from "react-feather";
 import { useNavigate, useParams } from "react-router-dom";
 import "./styles/messages.css";
 import Settings from "./settings";
@@ -23,6 +23,7 @@ function Messages() {
     const [messageInput, setMessageInput] = useState("");
     const [refresh, setRefresh] = useState(false);
     const [formattedNames, setFormattedNames] = useState("");
+    const [otherProfilePicture, setOtherProfilePicture] = useState("");
     const { profileId } = useParams();
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
@@ -83,6 +84,13 @@ function Messages() {
                 const data = await response.json();
                 setCurrentTheme(data.theme);
                 setParticipants(data.profileIds);
+                if (data.profileIds.length === 2) {
+                    const filteredProfiles = data.profileIds.filter(profile => profile._id !== profileId);
+                    setOtherProfilePicture(filteredProfiles[0].picture);
+                } else {
+                    setOtherProfilePicture("");
+                }
+
                 setFormattedNames(data.profileIds.filter(profile => profile._id !== profileId).map(profile => profile.name).join(', '))
             } catch (error) {
                 console.error("Error fetching data: ", error)
@@ -135,7 +143,14 @@ function Messages() {
                 <div className="flex justify-between p-3 drop-shadow-sm">
                     <div className="h-14 flex">
                         <div className="h-12 w-12 p-[6px]">
-                            <div className="h-9 w-9 bg-white rounded-full"></div>
+                            <div className={`h-9 w-9 rounded-full bg-cover bg-center grid place-items-center ${otherProfilePicture !== "" ? "" : "bg-white"}`}
+                                style={{ backgroundImage: otherProfilePicture !== "" ? `url(${otherProfilePicture})` : 'none' }}
+                            >
+                                {
+                                    otherProfilePicture === "" &&
+                                    <Users className="fill-dark-grey stroke-dark-grey" />
+                                }
+                            </div>
                         </div>
                         <div className="ml-1 text-light-grey">
                             <span className="text-left block font-bold">
@@ -163,7 +178,6 @@ function Messages() {
                                 {messages.map((message, index) => {
                                     const nextMessage = index < messages.length - 1 ? messages[index + 1] : null;
                                     const isGrouped = nextMessage && nextMessage.profileId._id === message.profileId._id;
-
                                     return (
                                         <div
                                             key={`${date}-${index}`}
@@ -183,7 +197,8 @@ function Messages() {
                                                 </div>
                                             </div>
                                             {!isGrouped ? (
-                                                <div className={`rounded-full bg-white h-9 w-9 self-end mb-3 ${message.profileId._id !== profileId ? "recieved-message-profile ml-1" : "hidden"}`}></div>
+                                                <div className={`rounded-full h-9 w-9 self-end mb-3 bg-cover bg-center ${message.profileId._id !== profileId ? "recieved-message-profile ml-1" : "hidden"} ${message.profileId.picture ? "" : "bg-white"}`}
+                                                    style={{ backgroundImage: message.profileId.picture ? `url(${message.profileId.picture})` : 'none' }}></div>
                                             ) : (
                                                 <div className={`w-full h-full recieved-message-profile`}></div>
                                             )}
@@ -212,7 +227,7 @@ function Messages() {
                 </div>
             </div>
             {showSettings && (
-                <Settings themes={themes} setCurrentTheme={setCurrentTheme} currentTheme={currentTheme} handleShowSettings={handleShowSettings} chatId={chatId} API_URL={API_URL} participants={participants} />
+                <Settings themes={themes} setCurrentTheme={setCurrentTheme} currentTheme={currentTheme} handleShowSettings={handleShowSettings} chatId={chatId} API_URL={API_URL} participants={participants} otherProfilePicture={otherProfilePicture} />
             )}
         </>
     );

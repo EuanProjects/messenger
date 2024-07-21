@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { LogOut, MessageCircle, Settings, Users } from "react-feather";
+import { LogOut, MessageCircle, Plus, Settings, Users } from "react-feather";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import ImageCard from "../setup/imageCard";
+import images from "../setup/images";
 
 function Navbar() {
     const API_URL = import.meta.env.VITE_API_URL;
@@ -12,6 +14,10 @@ function Navbar() {
     const [displaySettings, setDisplaySettings] = useState(false);
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
+    const [picture, setPicture] = useState("");
+    const [newPicture, setNewPicture] = useState("");
+    const [displayImages, setDisplayImages] = useState(false);
+    const [confirmClick, setConfirmClick] = useState(false);
     const token = localStorage.getItem("token");
 
 
@@ -32,14 +38,15 @@ function Navbar() {
 
                 const profile = await profileResponse.json();
                 setName(profile.name);
-                setUsername(profile.username)
+                setUsername(profile.username);
+                setPicture(profile.picture);
             } catch (error) {
                 console.error("Error getting profile: ", error);
             }
         }
 
         getProfile();
-    }, [displaySettings, API_URL, profileId])
+    }, [confirmClick, API_URL, profileId, navigate, token])
 
     function handleProfileClick() {
         setDisplayProfileModal(!displayProfileModal);
@@ -53,7 +60,6 @@ function Navbar() {
 
     function handleDisplaySettings() {
         setDisplaySettings(!displaySettings)
-        handleProfileClick();
     }
 
     async function handleConfirmClick() {
@@ -66,6 +72,7 @@ function Navbar() {
                     'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({
+                    picture: newPicture,
                     username: username,
                     name: name
                 })
@@ -77,12 +84,23 @@ function Navbar() {
             alert("Settings changed!");
             setName(profileChanged.name);
             setUsername(profileChanged.username);
+            setConfirmClick(!confirmClick);
         } catch (error) {
             console.error("Error changing profile: ", error);
         }
-        handleDisplaySettings(!displaySettings);
+        handleDisplaySettings();
+        handleProfileClick();
     }
 
+    function handleImageClick(imageLink) {
+        setNewPicture(imageLink);
+        handleDisplayImages();
+    }
+
+    function handleDisplayImages() {
+        setDisplayImages(!displayImages);
+        handleDisplaySettings();
+    }
     return (
         <>
             <div className="order-2 md:order-1 w-full h-[50px] md:w-[75px] md:h-full flex md:flex-col items-center justify-between bg-dark-grey shadow-inner">
@@ -101,14 +119,21 @@ function Navbar() {
                     </Link>
                 </div>
                 <div className="relative">
-                    <button onClick={() => handleProfileClick()}>
-                        <div className="rounded-full h-12 w-12 md:h-16 md:w-16 bg-white"></div>
+                    <button onClick={handleProfileClick}>
+                        <div className={`rounded-full h-12 w-12 md:h-16 md:w-16 bg-white bg-cover bg-center" ${!picture !== "" ? "bg-white" : ""}`}
+                            style={{ backgroundImage: picture !== "" ? `url(${picture})` : `none` }}></div>
                     </button>
                     {displayProfileModal &&
                         <div className="absolute top-0 -translate-y-48 -translate-x-full md:translate-x-1/4 w-48 h-48 rounded-lg p-2 bg-light-grey">
                             <button className="flex gap-2 items-center h-10"
                                 onClick={handleDisplaySettings}
-                            ><div className="rounded-full h-8 w-8 bg-white grid place-items-center"><Settings /></div><span className="text-white">Settings</span></button>
+                            >
+                                <div className="rounded-full h-8 w-8 bg-white grid place-items-center"
+                                    onClick={handleDisplaySettings}>
+                                    <Settings /></div>
+                                <span className="text-white">Settings</span>
+
+                            </button>
                             <button className="flex gap-2 items-center h-10"
                                 onClick={() => { handleLogOut() }}><div className="rounded-full h-8 w-8 bg-white grid place-items-center"><LogOut size={18} /></div><span className="text-white">Log Out</span></button>
                         </div>
@@ -118,13 +143,23 @@ function Navbar() {
             {
                 displaySettings &&
                 <div className="h-screen w-screen grid place-items-center shadow-sm bg-black/70 absolute top-0 left-0 z-50" onClick={handleDisplaySettings}>
-                    <div className="settings-grid relative w-1/4 h-1/2 max-h-[700px] max-w-[637px] rounded-lg bg-grey opacity-100" onClick={(e) => e.stopPropagation()}>
+                    <div className="settings-grid relative h-[390px] w-[318px] rounded-lg bg-grey opacity-100" onClick={(e) => e.stopPropagation()}>
                         <div className="p-3">
                             <h2 className="text-white text-center">Settings</h2>
                             <button className="absolute top-0 right-0 bg-highlighted-grey rounded-full h-6 w-6 text-white m-3"
                                 onClick={handleDisplaySettings}>X</button>
                         </div>
-                        <div className="p-4">
+                        <div className="px-4 pb-4">
+                            <div className="grid place-items-center mb-4">
+                                <button
+                                    className={`rounded-full h-24 w-24 grid place-items-center bg-cover ${!picture ? "bg-white" : ""}`}
+                                    style={{ backgroundImage: newPicture !== "" ? `url(${newPicture})` : `url(${picture})` }}
+                                    type="button"
+                                    onClick={() => handleDisplayImages()}
+                                >
+                                    <Plus />
+                                </button>
+                            </div>
                             <div>
                                 <label className="font-bold text-white" htmlFor="name">Username (login)</label>
                                 <input className="w-full rounded-md px-2 text-black" type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
@@ -139,6 +174,34 @@ function Navbar() {
                                 Cancel
                             </button>
                             <button className="bg-highlighted-grey rounded-lg" onClick={handleConfirmClick}>
+                                Confirm
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            }
+            {
+                displayImages &&
+                <div className="h-screen w-screen grid place-items-center shadow-sm bg-black/70 absolute top-0 left-0" onClick={handleDisplayImages}>
+                    <div className="settings-grid relative w-1/2 h-3/4 max-h-[700px] max-w-[637px] rounded-lg bg-grey opacity-100" onClick={handleDisplayImages}>
+                        <div className="p-3">
+                            <h2 className="text-white text-center">Choose Profile Picture</h2>
+                            <button className="absolute top-0 right-0 bg-highlighted-grey rounded-full h-6 w-6 text-white m-3"
+                                onClick={handleDisplayImages}>X</button>
+                        </div>
+                        <div className="overflow-y-auto grid grid-cols-2 gap-2 p-4">
+                            {
+                                images.map((url) => (
+                                    <ImageCard imageUrl={url} handleImageClick={handleImageClick} />
+                                ))
+                            }
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 text-white p-3">
+                            <button className="bg-highlighted-grey rounded-lg" onClick={handleDisplayImages}>
+                                Cancel
+                            </button>
+                            <button className="bg-highlighted-grey rounded-lg" onClick={handleDisplayImages}>
                                 Confirm
                             </button>
 
