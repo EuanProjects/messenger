@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Check, ChevronLeft, ChevronRight, X } from "react-feather";
+import { Check, ChevronLeft, ChevronRight, X, Users } from "react-feather";
 import "./styles/settings.css";
 import { useNavigate } from "react-router-dom";
 
-function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, chatId, API_URL, participants }) {
+function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, chatId, API_URL, participants, otherProfilePicture }) {
     const [showChatSettings, setShowChatSettings] = useState(false);
     const [showParticipants, setShowParticipants] = useState(false);
     const [showChangeThemes, setShowChangeThemes] = useState(false);
@@ -71,7 +71,14 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                     </button>
                 </div>
                 <div className="w-full">
-                    <div className="h-24 w-24 rounded-full bg-light-grey mx-auto mt-3"></div>
+                    <div className="h-24 w-24 rounded-full bg-light-grey mx-auto mt-3 bg-center bg-cover grid place-items-center"
+                        style={{ backgroundImage: otherProfilePicture !== "" ? `url(${otherProfilePicture})` : 'none' }}
+                    >
+                        {
+                            otherProfilePicture === "" &&
+                            <Users size={36} className="fill-dark-grey stroke-dark-grey" />
+                        }
+                    </div>
                     <h2 className="text-xl text-center mt-1 text-white">Example Chat</h2>
                     <p className="text-white text-center w-full">Participants *</p>
                 </div>
