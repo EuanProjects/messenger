@@ -7,7 +7,7 @@ function FriendRequestCard({ person, profileId, hasRequestSent, hasRequestReciev
 
     async function handleSendAddRequest(friendId) {
         try {
-            const response = await fetch(`http://${API_URL}/request`, {
+            const response = await fetch(`${API_URL}/request`, {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
@@ -34,7 +34,7 @@ function FriendRequestCard({ person, profileId, hasRequestSent, hasRequestReciev
     }
 
     async function handleAcceptRequest() {
-        const url = hasRequestRecieved ? `http://${API_URL}/request/${hasRequestRecieved._id}` : "";
+        const url = hasRequestRecieved ? `${API_URL}/request/${hasRequestRecieved._id}` : "";
         try {
             const response = await fetch(url, {
                 mode: 'cors',
@@ -63,7 +63,7 @@ function FriendRequestCard({ person, profileId, hasRequestSent, hasRequestReciev
     }
 
     async function handleRejectRequest() {
-        const url = hasRequestRecieved ? `http://${API_URL}/request/${hasRequestRecieved._id}` : `http://${API_URL}/request/${hasRequestSent._id}`;
+        const url = hasRequestRecieved ? `${API_URL}/request/${hasRequestRecieved._id}` : `${API_URL}/request/${hasRequestSent._id}`;
         try {
             const response = await fetch(url, {
                 mode: 'cors',

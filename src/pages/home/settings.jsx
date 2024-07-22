@@ -35,7 +35,7 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
     async function handleConfirmTheme() {
         const token = localStorage.getItem("token");
         try {
-            const response = await fetch(`http://${API_URL}/conversation/${chatId}/theme`, {
+            const response = await fetch(`${API_URL}/conversation/${chatId}/theme`, {
                 mode: 'cors',
                 method: 'PUT',
                 headers: {
@@ -72,7 +72,7 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
     async function handleConfirmClick() {
         const token = localStorage.getItem("token");
         try {
-            const deleteResponse = await fetch(`http://${API_URL}/conversation/${chatId}`, {
+            const deleteResponse = await fetch(`${API_URL}/conversation/${chatId}`, {
                 mode: 'cors',
                 method: 'DELETE',
                 headers: {

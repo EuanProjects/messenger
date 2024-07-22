@@ -13,7 +13,7 @@ function Login() {
         async function authorizeUser() {
             const token = localStorage.getItem("token");
             if (token) {
-                const getUserResponse = await fetch(`http://${API_URL}/profile`, {
+                const getUserResponse = await fetch(`${API_URL}/profile`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
@@ -39,7 +39,7 @@ function Login() {
         e.preventDefault();
 
         try {
-            const response = await fetch(`http://${API_URL}/login/`, {
+            const response = await fetch(`${API_URL}/login/`, {
                 mode: 'cors',
                 method: 'POST',
                 headers: {

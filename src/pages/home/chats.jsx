@@ -22,7 +22,7 @@ function Chats() {
     useEffect(() => {
         async function getChats() {
             try {
-                const response = await fetch(`http://${API_URL}/conversation/profile/${profileId}`, {
+                const response = await fetch(`${API_URL}/conversation/profile/${profileId}`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
@@ -43,7 +43,7 @@ function Chats() {
 
         async function getFriends() {
             try {
-                const response = await fetch(`http://${API_URL}/profile/${profileId}/friends`, {
+                const response = await fetch(`${API_URL}/profile/${profileId}/friends`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
@@ -83,7 +83,7 @@ function Chats() {
         const profileIds = Array.from(selectedFriends);
         profileIds.push(profileId);
         try {
-            const chatExistsResponse = await fetch(`http://${API_URL}/conversation/profile`, {
+            const chatExistsResponse = await fetch(`${API_URL}/conversation/profile`, {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
@@ -101,7 +101,7 @@ function Chats() {
 
             const chat = await chatExistsResponse.json();
             if (!chat || (chat && Object.keys(chat.length === 0))) {
-                const createChatResponse = await fetch(`http://${API_URL}/conversation`, {
+                const createChatResponse = await fetch(`${API_URL}/conversation`, {
                     mode: 'cors',
                     method: 'POST',
                     headers: {
