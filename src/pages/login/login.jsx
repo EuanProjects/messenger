@@ -28,7 +28,7 @@ function Login() {
                     } else {
                         navigate(`/profile/${user.profileId}/setup`);
                     }
-                } 
+                }
             }
         }
 
@@ -37,18 +37,26 @@ function Login() {
 
     async function handleLoginSubmit(e) {
         e.preventDefault();
-
+        let loginBody;
         try {
+            if (e.nativeEvent.submitter.name === "login") {
+                loginBody = {
+                    username,
+                    password
+                }
+            } else {
+                loginBody = {
+                    username : "demo",
+                    password : "demo"
+                }
+            }
             const response = await fetch(`${API_URL}/login/`, {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    username,
-                    password
-                })
+                body: JSON.stringify(loginBody)
             });
 
             const data = await response.json();
@@ -62,9 +70,6 @@ function Login() {
                     navigate(`/profile/${data.profileId}/setup`);
                 }
             }
-
-
-
         } catch (error) {
             console.error("Error fetching data: ", error)
         }
@@ -91,8 +96,8 @@ function Login() {
                     <input type="text" className="w-[250px] px-2 text-dark-grey" onChange={(e) => setPassword(e.target.value)} />
                 </p>
                 <div className="grid justify-center gap-2 mb-4 text-white">
-                    <button className="rounded-lg bg-deep-purple w-[250px] h-[50px] shadow-sm mb-2" type="sumbit">Login</button>
-                    <button className="rounded-lg bg-deep-purple w-[250px] h-[50px] shadow-sm" type="sumbit">Demo User</button>
+                    <button className="rounded-lg bg-deep-purple w-[250px] h-[50px] shadow-sm mb-2" type="sumbit" name="login">Login</button>
+                    <button className="rounded-lg bg-deep-purple w-[250px] h-[50px] shadow-sm" type="sumbit" name="demo">Demo User</button>
                 </div>
                 <div className="text-white">
                     New to messenger? <Link to="/createaccount" className="underline">Create an Account</Link>
