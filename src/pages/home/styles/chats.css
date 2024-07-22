@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.chats-grid {
+    display: grid;
+    grid-template-rows: 64px auto 64px;
+}
+
+.chat-row1 {
+    grid-row: 1;
+}
+
+.chat-row3 {
+    grid-row: 3;
+}
+
+@media (min-width: 768px) {
+    .md\:chats-grid {
+      @apply grid;
+      grid-template-rows: 64px auto 64px;
+    }
+
+        
+    .md\:messages-grid {
+        @apply grid;
+        grid-template-rows: 64px auto 64px;
+      }
+  }
