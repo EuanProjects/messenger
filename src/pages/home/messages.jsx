@@ -51,7 +51,7 @@ function Messages() {
 
     async function handleSendMessage(e) {
         try {
-            const response = await fetch(`http://${API_URL}/message/${chatId}`, {
+            const response = await fetch(`${API_URL}/message/${chatId}`, {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
@@ -82,7 +82,7 @@ function Messages() {
         async function getChat() {
             const token = localStorage.getItem("token");
             try {
-                const response = await fetch(`http://${API_URL}/conversation/${chatId}`, {
+                const response = await fetch(`${API_URL}/conversation/${chatId}`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
@@ -113,7 +113,7 @@ function Messages() {
 
         async function getMessages() {
             try {
-                const response = await fetch(`http://${API_URL}/message/${chatId}`, {
+                const response = await fetch(`${API_URL}/message/${chatId}`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {

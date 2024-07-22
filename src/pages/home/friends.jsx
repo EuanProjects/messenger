@@ -20,7 +20,7 @@ function Friends() {
     useEffect(() => {
         async function getPeopleOnMessenger() {
             try {
-                const response = await fetch(`http://${API_URL}/profiles`, {
+                const response = await fetch(`${API_URL}/profiles`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
@@ -41,7 +41,7 @@ function Friends() {
 
         async function getRequests() {
             try {
-                const response = await fetch(`http://${API_URL}/request/profile/${profileId}`, {
+                const response = await fetch(`${API_URL}/request/profile/${profileId}`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
@@ -63,7 +63,7 @@ function Friends() {
 
         async function getFriends() {
             try {
-                const response = await fetch(`http://${API_URL}/profile/${profileId}/friends`, {
+                const response = await fetch(`${API_URL}/profile/${profileId}/friends`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
@@ -94,7 +94,7 @@ function Friends() {
 
     async function handleFriendCardClick(friendId) {
         try {
-            const response = await fetch(`http://${API_URL}/conversation/profile`, {
+            const response = await fetch(`${API_URL}/conversation/profile`, {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
@@ -116,7 +116,7 @@ function Friends() {
             if (data && data.profileIds && data.profileIds.length > 0) {
                 navigate(`/home/profile/${profileId}/chats/${data._id}`);
             } else {
-                const response = await fetch(`http://${API_URL}/conversation`, {
+                const response = await fetch(`${API_URL}/conversation`, {
                     mode: 'cors',
                     method: 'POST',
                     headers: {

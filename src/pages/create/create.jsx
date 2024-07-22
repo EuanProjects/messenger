@@ -13,7 +13,7 @@ function Create() {
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            const response = await fetch(`http://${API_URL}/profile`, {
+            const response = await fetch(`${API_URL}/profile`, {
                 mode: "cors",
                 method: "POST",
                 headers: {

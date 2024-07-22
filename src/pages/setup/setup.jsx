@@ -25,7 +25,7 @@ function Setup() {
             setup: true
         }
         try {
-            const response = await fetch(`http://${API_URL}/profile/${profileId}`,
+            const response = await fetch(`${API_URL}/profile/${profileId}`,
                 {
                     mode: 'cors',
                     method: 'PUT',

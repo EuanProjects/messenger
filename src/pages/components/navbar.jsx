@@ -25,7 +25,7 @@ function Navbar() {
     useEffect(() => {
         async function getProfile() {
             try {
-                const profileResponse = await fetch(`http://${API_URL}/profile/${profileId}`, {
+                const profileResponse = await fetch(`${API_URL}/profile/${profileId}`, {
                     mode: 'cors',
                     method: 'GET',
                     headers: {
@@ -64,7 +64,7 @@ function Navbar() {
 
     async function handleConfirmClick() {
         try {
-            const profileChangeResponse = await fetch(`http://${API_URL}/profile/${profileId}`, {
+            const profileChangeResponse = await fetch(`${API_URL}/profile/${profileId}`, {
                 mode: 'cors',
                 method: 'PUT',
                 headers: {
