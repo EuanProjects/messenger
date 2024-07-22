@@ -72,6 +72,7 @@ function Messages() {
             const data = await response.json();
             setMessageInput("");
             setRefresh(!refresh);
+            navigate(`/home/profile/${profileId}/chats/${chatId}/refresh`);
         } catch (error) {
             console.error("Error fetching data: ", error)
         }

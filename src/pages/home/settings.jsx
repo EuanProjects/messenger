@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { Check, ChevronLeft, ChevronRight, X, Users } from "react-feather";
+import { Check, ChevronLeft, ChevronRight, X, Users, Trash2 } from "react-feather";
 import "./styles/settings.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, chatId, API_URL, participants, otherProfilePicture }) {
     const [showChatSettings, setShowChatSettings] = useState(false);
+    const [displayDeleteConfirm, setDisplayDeleteConfirm] = useState(false);
     const [showParticipants, setShowParticipants] = useState(false);
     const [showChangeThemes, setShowChangeThemes] = useState(false);
     const [newThemeSelected, setNewThemeSelected] = useState(true);
     const [selectedTheme, setSelectedTheme] = useState(currentTheme);
+    const profileId = useLocation().pathname.split("/")[3];
     const navigate = useNavigate();
 
     function handleShowChatSettingsClick() {
@@ -59,6 +61,33 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
         setShowChangeThemes(false);
     }
 
+    function handleDisplayDeleteConfirm() {
+        setDisplayDeleteConfirm(!displayDeleteConfirm);
+    }
+
+    function handleDeleteClick() {
+        handleDisplayDeleteConfirm()
+    }
+
+    async function handleConfirmClick() {
+        const token = localStorage.getItem("token");
+        try {
+            const deleteResponse = await fetch(`http://${API_URL}/conversation/${chatId}`, {
+                mode: 'cors',
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (deleteResponse.ok) {
+                navigate(`/home/profile/${profileId}/chats`);
+            }
+        } catch (error) {
+            console.error("Error fetching data: ", error)
+        }
+    }
+
     return (
         <>
             <div className="order-1 md:order-4 min-w-[250px] w-full md:grow xl:w-1/6 h-full bg-grey rounded-xl shadow-inner flex flex-col">
@@ -79,8 +108,8 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                             <Users size={36} className="fill-dark-grey stroke-dark-grey" />
                         }
                     </div>
-                    <h2 className="text-xl text-center mt-1 text-white">Example Chat</h2>
-                    <p className="text-white text-center w-full">Participants *</p>
+                    <h2 className="text-xl text-center mt-1 text-white">{participants.map((participant) => participant.name).join(", ")}</h2>
+                    <p className="text-white text-center w-full">{participants.length === 2 ? "" : `Participants ${participants.length}`}</p>
                 </div>
                 <div className="px-1 my-1 text-white">
                     <button className="w-full flex justify-between h-12 place-items-center rounded-lg px-2 hover:bg-highlighted-grey"
@@ -128,8 +157,41 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                             }
                         </>
                     }
+                    <div className="grid place-items-center mt-4">
+                        <button className="min-w-[150px] w-1/2 max-w-[175px] flex gap-2 h-12 place-items-center justify-center rounded-lg px-2 border-2 border-red-500 hover:bg-highlighted-grey text-red-500"
+                            onClick={handleDisplayDeleteConfirm}>
+                            <Trash2 className="stroke-red-500" />
+                            Delete Chat
+                        </button>
+                    </div>
                 </div>
             </div>
+            {
+                displayDeleteConfirm &&
+                <>
+                    <div className="h-screen w-screen grid place-items-center shadow-sm bg-black/70 absolute top-0 left-0" onClick={handleDisplayDeleteConfirm}>
+                        <div className="settings-grid relative h-[390px] w-[318px] rounded-lg bg-grey opacity-100" onClick={handleDisplayDeleteConfirm}>
+                            <div className="grid place-items-center text-white font-bold">
+                                Confirm Delete?
+                            </div>
+                            <p className="text-white px-2 text-center">
+                                The following chat containing&nbsp;
+                                {participants.map((participant) => participant.name).join(", ")} 
+                                &nbsp;and all its messages will be deleted!
+                            </p>
+                            <div className="grid grid-cols-2 gap-4 text-white p-3">
+                                <button className="bg-highlighted-grey rounded-lg" onClick={handleDisplayDeleteConfirm}>
+                                    Cancel
+                                </button>
+                                <button className="bg-highlighted-grey rounded-lg" onClick={handleConfirmClick}>
+                                    Confirm
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </>
+            }
             {
                 showChangeThemes &&
                 <>
