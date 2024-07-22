@@ -9,6 +9,7 @@ import ErrorPage from "./errorpage";
 import Messages from "../home/messages"
 import Setup from "../setup/setup";
 import { Navigate } from 'react-router-dom';
+import Refresh from "../home/refresh";
 
 
 
@@ -35,7 +36,11 @@ const routes = [
       children: [
         { path: "profile/:profileId/chats", element: <Chats />, children: [
           {path: "", element: <EmptyChat />},
-          {path: ":chatId", element: <Messages />},
+          {path: ":chatId", element: <Messages />,
+            children: [
+              {path: "refresh", element: <Refresh />}
+            ]
+          },
         ]},
         { path: "profile/:profileId/friends", element: <Friends />}
       ]

@@ -62,7 +62,7 @@ function Chats() {
 
         getChats();
         getFriends();
-    }, [API_URL, profileId])
+    }, [API_URL, profileId, url])
 
     function handleDisplayNewChat() {
         setDisplayNewChat(!displayNewChat);
@@ -100,7 +100,7 @@ function Chats() {
             }
 
             const chat = await chatExistsResponse.json();
-            if (!chat) {
+            if (!chat || (chat && Object.keys(chat.length === 0))) {
                 const createChatResponse = await fetch(`http://${API_URL}/conversation`, {
                     mode: 'cors',
                     method: 'POST',
@@ -116,6 +116,8 @@ function Chats() {
                 if (!createChatResponse.ok) {
                     navigate("/");
                 }
+                const data = await createChatResponse.json();
+                navigate(`/home/profile/${profileId}/chats/${data._id}`);
             } else {
                 navigate(`/home/profile/${profileId}/chats/${chat._id}`);
             }
