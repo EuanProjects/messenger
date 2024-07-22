@@ -83,13 +83,13 @@ function Setup() {
             {
                 displayImages &&
                 <div className="h-screen w-screen grid place-items-center shadow-sm bg-black/70 absolute top-0 left-0" onClick={handleDisplayImages}>
-                    <div className="settings-grid relative w-1/2 h-3/4 max-h-[700px] max-w-[637px] rounded-lg bg-grey opacity-100" onClick={(e) => e.stopPropagation()}>
+                    <div className="settings-grid relative h-[390px] w-[318px] rounded-lg bg-grey opacity-100" onClick={(e) => e.stopPropagation()}>
                         <div className="p-3">
                             <h2 className="text-white text-center">Choose Profile Picture</h2>
                             <button className="absolute top-0 right-0 bg-highlighted-grey rounded-full h-6 w-6 text-white m-3"
                                 onClick={handleDisplayImages}>X</button>
                         </div>
-                        <div className="overflow-y-auto grid grid-cols-2 gap-2 p-4">
+                        <div className="overflow-y-auto grid grid-cols-2 place-items-center gap-2 p-4">
                             {
                                 images.map((url) => (
                                     <ImageCard imageUrl={url} handleImageClick={handleImageClick} />
