@@ -196,14 +196,14 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                 showChangeThemes &&
                 <>
                     <div className="h-screen w-screen grid place-items-center shadow-sm bg-black/70 absolute top-0 left-0" onClick={handleShowThemesClick}>
-                        <div className="settings-grid relative w-1/2 h-3/4 max-h-[700px] max-w-[637px] rounded-lg bg-grey opacity-100" onClick={(e) => e.stopPropagation()}>
+                        <div className="settings-grid min-h-[390px] min-w-[318px] relative w-1/2 h-3/4 max-h-[700px] max-w-[637px] rounded-lg bg-grey opacity-100" onClick={(e) => e.stopPropagation()}>
                             <div className="p-3">
                                 <h2 className="text-white text-center">Preview and select theme</h2>
                                 <button className="absolute top-0 right-0 bg-highlighted-grey rounded-full h-6 w-6 text-white m-3"
                                     onClick={handleShowThemesClick}>X</button>
                             </div>
                             <div className="overflow-y-auto grid grid-cols-2 gap-4 p-4">
-                                <div className="overflow-auto">
+                                <div className="overflow-y-auto">
                                     {
                                         Object.keys(themes).map((theme) => (
                                             <>
@@ -213,12 +213,12 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                                                             style={{
                                                                 border: `8px solid ${themes[theme]}`,
                                                             }}
-                                                            className="w-8 h-8 border-solid rounded-full relative mr-2"
+                                                            className="w-6 h-6 border-solid rounded-full relative mr-2"
                                                         ></div>
                                                         <span className="text-white">{theme}</span>
                                                     </div>
                                                     {(theme === currentTheme) &&
-                                                        <div>
+                                                        <div className="grid h-full place-items-center">
                                                             <Check className="stroke-white" />
                                                         </div>
                                                     }
@@ -233,7 +233,7 @@ function Settings({ themes, setCurrentTheme, currentTheme, handleShowSettings, c
                                             backgroundColor: themes[selectedTheme],
                                             color: 'white',
                                         }}
-                                        className="place-self-end rounded-lg h-16 min-w-[100px] max-w-[75%] my-3 py-2 px-3"
+                                        className="place-self-end rounded-lg min-h-16 min-w-[100px] max-w-[75%] my-3 py-2 px-3"
                                     >
                                         Messages sent will look like this
                                     </div>
