@@ -1,7 +1,7 @@
 import { PlusSquare } from "react-feather"
 import "./styles/chats.css"
 import FriendRequestCard from "./friendRequestCard"
-import FriendCard from "./friendCard";
+import FriendCard from "./friendcard";
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom";
 
