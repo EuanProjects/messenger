@@ -51,8 +51,6 @@ function Login() {
                     password: "demo"
                 }
             }
-
-            console.log(loginBody);
             const response = await fetch(`${API_URL}/login/`, {
                 mode: 'cors',
                 method: 'POST',

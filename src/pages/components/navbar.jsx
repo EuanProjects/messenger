@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LogOut, MessageCircle, Plus, Settings, Users } from "react-feather";
+import { Book, LogOut, MessageCircle, Plus, Settings, Users } from "react-feather";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import ImageCard from "../setup/imageCard";
 import images from "../setup/images";
@@ -124,7 +124,7 @@ function Navbar() {
                             style={{ backgroundImage: picture !== "" ? `url(${picture})` : `none` }}></div>
                     </button>
                     {displayProfileModal &&
-                        <div className="absolute top-0 -translate-y-48 -translate-x-full md:translate-x-1/4 w-48 h-48 rounded-lg p-2 bg-light-grey">
+                        <div className="absolute top-0 -translate-y-48 -translate-x-full md:translate-x-1/4 w-48 h-48 rounded-lg p-2 bg-highlighted-grey">
                             <button className="flex gap-2 items-center h-10"
                                 onClick={handleDisplaySettings}
                             >
@@ -134,8 +134,18 @@ function Navbar() {
                                 <span className="text-white">Settings</span>
 
                             </button>
+                            <Link className="flex gap-2 items-center h-10"
+                                to={`/tutorial/${profileId}`}
+                            >
+                                <div className="rounded-full h-8 w-8 bg-white grid place-items-center"
+                                    onClick={handleDisplaySettings}>
+                                    <Book /></div>
+                                <span className="text-white">Tutorial</span>
+
+                            </Link>
                             <button className="flex gap-2 items-center h-10"
                                 onClick={() => { handleLogOut() }}><div className="rounded-full h-8 w-8 bg-white grid place-items-center"><LogOut size={18} /></div><span className="text-white">Log Out</span></button>
+                            
                         </div>
                     }
                 </div>
@@ -162,11 +172,11 @@ function Navbar() {
                             </div>
                             <div>
                                 <label className="font-bold text-white" htmlFor="name">Username (login)</label>
-                                <input className="w-full rounded-md px-2 text-black" type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+                                <input className="w-full rounded-md px-2 text-black" type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={username === "demo"}/>
                             </div>
                             <div className="mt-2">
                                 <label className="font-bold text-white" htmlFor="name">Name (displayed in chat)</label>
-                                <input className="w-full rounded-md px-2 text-black" type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                                <input className="w-full rounded-md px-2 text-black" type="text" value={name} onChange={(e) => setName(e.target.value)} disabled={name === "Demo"}/>
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4 text-white p-3">

@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "react-feather";
 import "../home/styles/settings.css"
 import ImageCard from "./imageCard";
@@ -16,14 +16,39 @@ function Setup() {
 
     const [displayImages, setDisplayImage] = useState("");
 
+    useEffect(() => {
+        async function getUser() {
+            const responseGetProfile = await fetch(`${API_URL}/profile/${profileId}`,
+                {
+                    mode: 'cors',
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                }
+            )
 
+            const data = await responseGetProfile.json();
+            if (data.name === "Demo") {
+                setName("Demo");
+            }
+        }
+
+        getUser();
+    })
     async function handleSaveProfile(e) {
         e.preventDefault()
         const update = {
             name,
             picture: profilePicture,
-            setup: true
+
         }
+
+        if (name !== "Demo") {
+            update["setup"] = true;
+        }
+
         try {
             const response = await fetch(`${API_URL}/profile/${profileId}`,
                 {
@@ -40,8 +65,8 @@ function Setup() {
                 navigate("/");
             }
 
-            const data = await response.json();
-            navigate(`/home/profile/${profileId}/chats`);
+            // add tutorial
+            navigate(`/tutorial/${profileId}`);
         } catch (error) {
             console.error("Error saving profile: ", error);
         }
@@ -75,7 +100,7 @@ function Setup() {
                     </fieldset>
                     <fieldset className="mt-4">
                         <label className="mr-4 text-white" htmlFor="">Name (displayed in chat)</label>
-                        <input type="text" className="h-6 w-full px-2 rounded-md text-dark-grey" onChange={(e) => setName(e.target.value)} />
+                        <input type="text" className="h-6 w-full px-2 rounded-md text-dark-grey" value={name} onChange={(e) => setName(e.target.value)} disabled={name === "Demo"}/>
                     </fieldset>
                     <div className="w-full mt-4"><button className="bg-deep-purple rounded-lg w-full h-12" type="submit">Save</button></div>
                 </form>

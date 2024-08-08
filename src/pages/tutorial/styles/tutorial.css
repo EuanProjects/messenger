@@ -1,0 +1,4 @@
+.tutorial-grid {
+    display: grid;
+    grid-template-columns: 64px auto 64px;
+}

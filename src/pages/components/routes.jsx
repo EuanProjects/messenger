@@ -10,6 +10,7 @@ import Messages from "../home/messages"
 import Setup from "../setup/setup";
 import { Navigate } from 'react-router-dom';
 import Refresh from "../home/refresh";
+import Tutorial from "../tutorial/tutorial";
 
 
 
@@ -28,6 +29,11 @@ const routes = [
       path: "profile/:profileId/setup",
       element: <Setup />,
       errorElement: <ErrorPage />
+    },
+    {
+      path: "tutorial/:profileId",
+      element: <Tutorial />,
+      elementError: <ErrorPage />
     },
     {
       path: "/home",
