@@ -1,9 +1,9 @@
 # Messenger
 
-# Description
+## Description
 Messenger is an application to communicate with others! Create an account or log in as a demo user to friend others and send a message!
 
-# Demo
+## Demo
 ![Messenger Home Page](https://github.com/EuanProjects/messenger/blob/main/src/pages/tutorial/images/1.png)
 ![Messenger new chat](https://github.com/EuanProjects/messenger/blob/main/src/pages/tutorial/images/2.png)
 ![Messenger delete chat](https://github.com/EuanProjects/messenger/blob/main/src/pages/tutorial/images/3.png)
